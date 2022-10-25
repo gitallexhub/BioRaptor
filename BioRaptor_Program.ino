@@ -2,7 +2,11 @@
 
   // Include stepper motor toolbox.
  #include <Stepper.h>
+ #include <LiquidCrystal.h>
+ #include <Wire.h>
 
+LiquidCrystal_I2C lcd(0x27, 16l, 2)
+  
   // Define steps per revolution of stepper motors (1.8 degrees per step, 360 degrees full rotation).
 const int LinearMotorStepPerRev  = 200; 
 const int OrbitalMotorStepPerRev = 200;
@@ -39,6 +43,12 @@ int LinearMotorSteps    = 0;
 int OrbitalMotorSteps   = 0;
  
 void setup() {
+  lcd.begin();
+  lcd.backlight();
+  lcd.clear();
+  lcd.setCursor(4,0);
+  lcd.print("Testing...");
+  
   // Set intial state as off for all controllers.
   digitalWrite(Linear_ButtonPin,    LOW)
   digitalWrite(Orbital_ButtonPin,   LOW)
