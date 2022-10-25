@@ -64,8 +64,22 @@ void setup() {
   pinMode(OrbitalMotorPin,OUTPUT)
 
   // Linear motor zeroing sequence.
-  Linear_ButtonState = digitalRead(Linear_ButtonPin);
-  while (
+    // Define states for linear motor, and both limit switches.
+  Linear_ButtonState    = digitalRead(Linear_ButtonPin);
+  Limit_Switch_OneState = digitalRead(Limit_Switch_OnePin);
+  Limit_Switch_TwoState = digitalRead(Limit_Switch_TwoPin);
+ 
+    // While loop for horizontal homing.
+  while (Limit_Switch_OneState != HIGH)                               // While limit switch one is open,
+    int Speed_PontentiometerState = analogRead(A0)                    // Read the potentiometer input.
+    LinearMotorSpeed = map(Speed_PotentiometerState, 0, 1023, 0, 100) // Map voltages to rpm. ****NEEDS TO BE VERIFIED****
+    if (LinearMotorSpeed > 0) {                                       // If potentiometer reading is greater than zero,
+      LinearStepper.setSpeed(LinearMotorSpeed);                       // Set linear motor speed to potentiometer input,
+      LinearStepper.step(LinearMotorStepPerRev/100);                  // Send step command. ****NEEDS TO BE VERIFIED****
+      
+      
+      
+    
     
   // Shaking pattern selection. 
   // Shaking size selction (diamter). 
