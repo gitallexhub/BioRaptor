@@ -14,21 +14,25 @@ const int D_1_ButtonPin           = 3;
 const int D_2_ButtonPin           = 4;
 const int D_3_ButtonPin           = 5;
 const int D_4_ButtonPin           = 6;
+const int Limit_Switch_OnePin     = 7;
+const int Limit_Switch_TwoPin     = 8;
 
   // Potentiometer is an analog input pin.
 #define Speed_PotentiometerPin      A0 
 
   // Define motor pin sets.
-Stepper LinearStepper  = Stepper(LinearMotorStepPerRev, 7, 8, 9, 10);
-Stepper OrbitalStepper = Stepper(OrbtialMotorStepPerRev, 11, 12, 13, 14);
+Stepper LinearStepper  = Stepper(LinearMotorStepPerRev, 9, 10, 11, 12);
+Stepper OrbitalStepper = Stepper(OrbtialMotorStepPerRev, 13, 14, 15, 16);
 
-  // Assign state variable to user input buttons to define pushed or not pushed, these are not constant.
-int Linear_ButtonState  = 0;
-int Orbital_ButtonState = 0;
-int D_1_ButtonState     = 0;
-int D_2_ButtonState     = 0;
-int D_3_ButtonState     = 0;
-int D_4_ButtonState     = 0; 
+  // Assign state variable to user input buttons to define pushed or not pushed, limit switches closed or not open, these are not constant.
+int Linear_ButtonState    = 0;
+int Orbital_ButtonState   = 0;
+int D_1_ButtonState       = 0;
+int D_2_ButtonState       = 0;
+int D_3_ButtonState       = 0;
+int D_4_ButtonState       = 0; 
+int Limit_Switch_OneState = 0;
+int Limit_Switch_TwoState = 0;
 
   // Define step count.
 int LinearMotorSteps    = 0;
@@ -36,14 +40,16 @@ int OrbitalMotorSteps   = 0;
  
 void setup() {
   // Set intial state as off for all controllers.
-  digitalWrite(Linear_ButtonPin,  LOW)
-  digitalWrite(Orbital_ButtonPin, LOW)
-  digitalWrite(D_1_ButtonPin,     LOW)
-  digitalWrite(D_2_ButtonPin,     LOW)
-  digitalWrite(D_3_ButtonPin,     LOW)
-  digitalWrite(D_4_ButtonPin,     LOW) 
-  digitalWrite(LinearMotorPin,    LOW)
-  digitalWrite(OrbitalMotorPin,   LOW)
+  digitalWrite(Linear_ButtonPin,    LOW)
+  digitalWrite(Orbital_ButtonPin,   LOW)
+  digitalWrite(D_1_ButtonPin,       LOW)
+  digitalWrite(D_2_ButtonPin,       LOW)
+  digitalWrite(D_3_ButtonPin,       LOW)
+  digitalWrite(D_4_ButtonPin,       LOW) 
+  digitalWrite(LinearMotorPin,      LOW)
+  digitalWrite(OrbitalMotorPin,     LOW)
+  digitalWrite(Limit_Switch_OnePin, LOW)
+  digitalWrite(Limit_Switch_TwoPin, LOW)
   
   // Set user controllers as inputs.
   pinMode(Linear_ButtonPin,   INPUT)
@@ -58,7 +64,11 @@ void setup() {
   pinMode(OrbitalMotorPin,OUTPUT)
 
   // Linear motor zeroing sequence.
-  
+  Linear_ButtonState = digitalRead(Linear_ButtonPin);
+  while (
+    
+  // Shaking pattern selection. 
+  // Shaking size selction (diamter). 
   if (pinMode(Linear_ButtonPin,HIGH))
   X = LinearMotorPin;
   if (
