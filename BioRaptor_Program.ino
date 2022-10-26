@@ -50,28 +50,28 @@ void setup() {
   lcd.print("Testing...");
   
   // Set intial state as off for all controllers.
-  digitalWrite(Linear_ButtonPin,    LOW)
-  digitalWrite(Orbital_ButtonPin,   LOW)
-  digitalWrite(D_1_ButtonPin,       LOW)
-  digitalWrite(D_2_ButtonPin,       LOW)
-  digitalWrite(D_3_ButtonPin,       LOW)
-  digitalWrite(D_4_ButtonPin,       LOW) 
-  digitalWrite(LinearMotorPin,      LOW)
-  digitalWrite(OrbitalMotorPin,     LOW)
-  digitalWrite(Limit_Switch_OnePin, LOW)
-  digitalWrite(Limit_Switch_TwoPin, LOW)
+  digitalWrite(Linear_ButtonPin,    LOW);
+  digitalWrite(Orbital_ButtonPin,   LOW);
+  digitalWrite(D_1_ButtonPin,       LOW);
+  digitalWrite(D_2_ButtonPin,       LOW);
+  digitalWrite(D_3_ButtonPin,       LOW);
+  digitalWrite(D_4_ButtonPin,       LOW);
+  digitalWrite(LinearMotorPin,      LOW);
+  digitalWrite(OrbitalMotorPin,     LOW);
+  digitalWrite(Limit_Switch_OnePin, LOW);
+  digitalWrite(Limit_Switch_TwoPin, LOW);
   
   // Set user controllers as inputs.
-  pinMode(Linear_ButtonPin,   INPUT)
-  pinMode(Orbital_ButtonPin,  INPUT)
-  pinMode(D_1_ButtonPin,      INPUT)
-  pinMode(D_2_ButtonPin,      INPUT)
-  pinMode(D_3_ButtonPin,      INPUT)
-  pinMode(D_4_ButtonPin,      INPUT)
+  pinMode(Linear_ButtonPin,   INPUT);
+  pinMode(Orbital_ButtonPin,  INPUT);
+  pinMode(D_1_ButtonPin,      INPUT);
+  pinMode(D_2_ButtonPin,      INPUT);
+  pinMode(D_3_ButtonPin,      INPUT);
+  pinMode(D_4_ButtonPin,      INPUT);
   
   // Set shaker controllers as outputs. 
-  pinMode(LinearMotorPin, OUTPUT)
-  pinMode(OrbitalMotorPin,OUTPUT)
+  pinMode(LinearMotorPin, OUTPUT);
+  pinMode(OrbitalMotorPin,OUTPUT);
 
   // Linear motor zeroing sequence.
     // Define states for linear motor, and both limit switches.
@@ -117,7 +117,7 @@ void setup() {
 
 
 void loop() {
-  digitaWrite(X, HIGH)
+  digitaWrite(X, HIGH);
   
   // put your main code here, to run repeatedly:
 
