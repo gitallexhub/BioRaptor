@@ -21,6 +21,9 @@ const int D_4_ButtonPin           = 6;
 const int Limit_Switch_OnePin     = 7;
 const int Limit_Switch_TwoPin     = 8;
 
+  // Define orbital zero position. ****MEASURED FROM TESTING****
+
+
   // Potentiometer is an analog input pin.
 #define Speed_PotentiometerPin      A0 
 
@@ -101,22 +104,41 @@ void setup() {
   }
   
   // Shaking pattern selection. 
-    // Shaking size selction (diamter). 
-  if (pinMode(D_1_ButtonPin,HIGH)) {
-  X = D_1_ButtonPin;
-  else if (pinMode(D_2_ButtonPin, HIGH))
-    X = D_2_ButtonPin;
-    else if (pinMode(D_3_ButtonPin, HIGH))
-      X = D_3_ButtonPin;
-    else if (pinMode(D_4_ButtonPin, HIGH))
-      X = D_4_ButtonPin;
-  if (
+  // Read inputs.
+ Linear_ButtonState    = digitalRead(Linear_ButtonPin);
+ Orbital_ButtonState   = digitalRead(Orbital_ButtonPin);
+ D_1_ButtonState       = digitalRead(D_1_ButtonState);
+ D_2_ButtonState       = digitalRead(D_2_ButtonState);
+ D_3_ButtonState       = digitalRead(D_3_ButtonState);
+ D_4_ButtonState       = digitalRead(D_4_ButtonState); 
+  
+  // Shaking size selction (diamter). 
+  if (D_1_ButtonState = HIGH) {
+  X = D_1_NumberOfSteps;                     //***NEED TO DETERMINE THIS DISTANCE BY TEST***
+  else if (D_2_ButtonState = HIGH)
+    X = D_2_NumberOfSteps;
+    else if (D_3_ButtonState = HIGH)
+      X = D_3_NumberOfSteps;
+    else if (D_4_ButtonState = HIGH)
+      X = D_4_NumberOfSteps;
+  }
+  if (Speed_PotentiometerState = HIGH) {
+      // Define motor speed.
+  int Speed_PontentiometerState = analogRead(A0);
+  MotorSpeed = map(Speed_PotentiometerState, 0, 1023, 0, 100);
+  }
+  if (pinMode(Linear_ButtonPin,HIGH)) {
+  Y = Linear_ButtonPin;
+    else if (pinMode(Orbital_ButtonPin, HIGH))
+      Y = Orbital_ButtonPin;
+  }
 
 }
 
 
 
 void loop() {
+  
   digitaWrite(X, HIGH);
   
   // put your main code here, to run repeatedly:
