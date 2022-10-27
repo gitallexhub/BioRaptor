@@ -86,7 +86,7 @@ void setup() {
     // While loop for horizontal homing.
   while (Limit_Switch_TwoState != HIGH && Limit_Swtich_OneState != HIGH) {  // While the limit switches are not closed at the same time (should never happen),
     int Speed_PontentiometerState = analogRead(A0)                          // Read the potentiometer input
-    LinearMotorSpeed = map(Speed_PotentiometerState, 0, 1023, 0, 100)       // Map voltages to rpm ****NEEDS TO BE VERIFIED****
+    LinearMotorSpeed = map(Speed_PotentiometerState, 0, 1023, 0, 350)       // Map voltages to rpm ****NEEDS TO BE VERIFIED****
     if (LinearMotorSpeed > 0) {                                             // If potentiometer reading is greater than zero,
       LinearStepper.setSpeed(LinearMotorSpeed);                             // Set linear motor speed to potentiometer input,
       LinearStepper.step(LinearMotorStepPerRev/100);                        // Send step command. ****NEEDS TO BE VERIFIED****
@@ -130,7 +130,7 @@ void setup() {
   if (Speed_PotentiometerState = HIGH) {
       // Define motor speed.
   int Speed_PontentiometerState = analogRead(A0);
-  MotorSpeed = map(Speed_PotentiometerState, 0, 1023, 0, 100);
+  MotorSpeed = map(Speed_PotentiometerState, 0, 1023, 0, 350);
   }
   if (Linear_ButtonState = HIGH) {
     i = j;
