@@ -147,6 +147,21 @@ void loop() {
   
   digitaWrite(X, HIGH);
   
+  
+  
   // put your main code here, to run repeatedly:
+  
+  while (startMillis > 10000 ) {  // While the limit switches are not closed at the same time (should never happen),
+   
+    if (Limit_Switch_OneState = High ) {                                             // If limit switch 1 is triggered,
+      LinearStepper.setSpeed(0);                                                     // Set linear motor speed to 0,
+      LinearStepper.step(0);                                                         // Send step command to 0
+    }
+    if (Limit_Swtich_TwoState = HIGH) {                                              // If limit switch two is triggered,
+      LinearStepper.setSpeed(0);                                                     // Change the direction of the motor                                                      
+      LinearStepper.step(0);                        
+    }
+
+  }
 
 }
