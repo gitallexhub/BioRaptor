@@ -6,6 +6,10 @@
  #include <Wire.h>
 
 LiquidCrystal_I2C lcd(0x27, 20, 4);
+unasgned long startMillis:
+unasigned long currentMillis;
+const unsigned long period = 1000;
+
 
   // Define steps per revolution of stepper motors (1.8 degrees per step, 360 degrees full rotation).
 const int LinearMotorStepPerRev  = 200; 
@@ -46,6 +50,8 @@ int LinearMotorSteps      = 0;
 int OrbitalMotorSteps     = 0;
  
 void setup() {
+  Serial.begin(9600);
+  startMillis = millis();
   lcd.begin();
   lcd.backlight();
   lcd.clear();
