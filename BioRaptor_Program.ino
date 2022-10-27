@@ -6,10 +6,6 @@
  #include <Wire.h>
 
 LiquidCrystal_I2C lcd(0x27, 20, 4);
-unasgned long startMillis:
-unasigned long currentMillis;
-const unsigned long period = 1000;
-
 
   // Define steps per revolution of stepper motors (1.8 degrees per step, 360 degrees full rotation).
 const int LinearMotorStepPerRev  = 200; 
@@ -24,9 +20,10 @@ const int D_3_ButtonPin           = 5;
 const int D_4_ButtonPin           = 6;
 const int Limit_Switch_OnePin     = 7;
 const int Limit_Switch_TwoPin     = 8;
+const int Rotary_Encoder_Pin      = 17;
 
   // Define orbital zero position. ****MEASURED FROM TESTING****
-
+int totalOrbitalMotorStepCountFromInitialPosition = digitalRead(Rotary_Encoder_Pin);
 
   // Potentiometer is an analog input pin.
 #define Speed_PotentiometerPin      A0 
@@ -50,8 +47,6 @@ int LinearMotorSteps      = 0;
 int OrbitalMotorSteps     = 0;
  
 void setup() {
-  Serial.begin(9600);
-  startMillis = millis();
   lcd.begin();
   lcd.backlight();
   lcd.clear();
@@ -120,48 +115,59 @@ void setup() {
   
   // Shaking size selction (diamter). 
   if (D_1_ButtonState = HIGH) {
-  X = D_1_NumberOfSteps;                     //***NEED TO DETERMINE THIS DISTANCE BY TEST***
+  X = D_1_NumberOfSteps;                     //***NEED ALL OF THESE TO DETERMINE THIS DISTANCE BY TEST***
+    Y = D_1_SetUpSteps;                       
   else if (D_2_ButtonState = HIGH)
     X = D_2_NumberOfSteps;
+    Y = D_2_SetUpSteps;
     else if (D_3_ButtonState = HIGH)
       X = D_3_NumberOfSteps;
+      Y = D_3_SetUpSteps;
     else if (D_4_ButtonState = HIGH)
       X = D_4_NumberOfSteps;
+      Y = D_4_SetUpSteps;
   }
   if (Speed_PotentiometerState = HIGH) {
       // Define motor speed.
   int Speed_PontentiometerState = analogRead(A0);
   MotorSpeed = map(Speed_PotentiometerState, 0, 1023, 0, 100);
   }
-  if (pinMode(Linear_ButtonPin,HIGH)) {
-  Y = Linear_ButtonPin;
-    else if (pinMode(Orbital_ButtonPin, HIGH))
-      Y = Orbital_ButtonPin;
+  if (Linear_ButtonState = HIGH) {
+    i = j;
+    else if (Orbital_ButtonState = HIGH)
+      i = k;
+    else if (Linear_ButtonState = HIGH && Orbital_ButtonState = HIGH)
+          i = m;
   }
-
+moderateSpeed = 20; 
 }
 
-
-
 void loop() {
-  
-  digitaWrite(X, HIGH);
-  
-  
-  
-  // put your main code here, to run repeatedly:
-  
-  while (startMillis > 10000 ) {  // While the limit switches are not closed at the same time (should never happen),
-   
-    if (Limit_Switch_OneState = High ) {                                             // If limit switch 1 is triggered,
-      LinearStepper.setSpeed(0);                                                     // Set linear motor speed to 0,
-      LinearStepper.step(0);                                                         // Send step command to 0
-    }
-    if (Limit_Swtich_TwoState = HIGH) {                                              // If limit switch two is triggered,
-      LinearStepper.setSpeed(0);                                                     // Change the direction of the motor                                                      
-      LinearStepper.step(0);                        
-    }
-
+ // Read shaking pattern selection (linear, orbital, or double orbital), and set up for correct shaking size, and shaking speed.
+  if (i = j) { // Linear shaking only.
+   LinearStepper.setSpeed(MotorSpeed);
+    LinearStepper.step(X);
+    LinearStepper.step(-X);
+  else if (i = k) 
+    OrbitalStepper.setSpeed(moderateSpeed);
+    OrbitalStepper.step(-totalStepCountFromInitialPosition);
+    //HOLD FOR A SEC//
+    LinearStepper.setSpeed(moderateSpeed);
+    LinearStepper.step(Y);
+    //TIMER: HOLD FOR A SEC//
+    OrbitalStepper.setSpeed(MotorSpeed);
+    OrbitalStepper.step(OrbitalMotorStepPerRev);
+    else if (i = m)
+      OrbitalStepper.setSpeed(moderateSpeed);
+      OrbitalStepper.step(-totalStepCountFromInitialPosition);
+      //HOLD FOR A SEC//
+      LinearStepper.setSpeed(moderateSpeed);
+      LinearStepper.step(Y);
+      //HOLD//
+      LinearStepper.setSpeed(MotorSpeed);
+      OrbitalStepper.setSpeed(MotorSpeed)
+      LinearStepper.step(X);
+      LinearStepper.step(-X);
+      OrbitalStepper.step(OrbitalMotorStepPerRev);
   }
-
 }
