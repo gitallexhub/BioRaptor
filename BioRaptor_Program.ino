@@ -21,8 +21,9 @@ const int D_4_ButtonPin           = 6;
 const int Limit_Switch_OnePin     = 7;
 const int Limit_Switch_TwoPin     = 8;
 const int Rotary_Encoder_Pin      = 17;
+const int Emergency_StopPin       = 18;
 
-  // Define orbital zero position. ****MEASURED FROM TESTING****
+  // Define orbital zero position. ****PHYSICAL INITIAL POSITION SET FROM TEST****
 int totalOrbitalMotorStepCountFromInitialPosition = digitalRead(Rotary_Encoder_Pin);
 
   // Potentiometer is an analog input pin.
@@ -41,6 +42,7 @@ int D_3_ButtonState       = 0;
 int D_4_ButtonState       = 0; 
 int Limit_Switch_OneState = 0;
 int Limit_Switch_TwoState = 0;
+int Emergency_StopState   = 0;
 
   // Define step count.
 int LinearMotorSteps      = 0;
@@ -64,6 +66,7 @@ void setup() {
   digitalWrite(OrbitalMotorPin,     LOW);
   digitalWrite(Limit_Switch_OnePin, LOW);
   digitalWrite(Limit_Switch_TwoPin, LOW);
+  digitalWrite(Emergency_StopPin,   LOW);
   
   // Set user controllers as inputs.
   pinMode(Linear_ButtonPin,   INPUT);
@@ -72,6 +75,7 @@ void setup() {
   pinMode(D_2_ButtonPin,      INPUT);
   pinMode(D_3_ButtonPin,      INPUT);
   pinMode(D_4_ButtonPin,      INPUT);
+  pinMode(Emergency_StopPin,  INPUT
   
   // Set shaker controllers as outputs. 
   pinMode(LinearMotorPin, OUTPUT);
@@ -144,11 +148,11 @@ moderateSpeed = 20;
 
 void loop() {
  // Read shaking pattern selection (linear, orbital, or double orbital), and set up for correct shaking size, and shaking speed.
-  if (i = j) { // Linear shaking only.
+  if (i == j) { // Linear shaking only.
    LinearStepper.setSpeed(MotorSpeed);
     LinearStepper.step(X);
     LinearStepper.step(-X);
-  else if (i = k) 
+  else if (i == k) 
     OrbitalStepper.setSpeed(moderateSpeed);
     OrbitalStepper.step(-totalStepCountFromInitialPosition);
     //HOLD FOR A SEC//
@@ -157,7 +161,7 @@ void loop() {
     //TIMER: HOLD FOR A SEC//
     OrbitalStepper.setSpeed(MotorSpeed);
     OrbitalStepper.step(OrbitalMotorStepPerRev);
-    else if (i = m)
+    else if (i == m)
       OrbitalStepper.setSpeed(moderateSpeed);
       OrbitalStepper.step(-totalStepCountFromInitialPosition);
       //HOLD FOR A SEC//
@@ -169,5 +173,28 @@ void loop() {
       LinearStepper.step(X);
       LinearStepper.step(-X);
       OrbitalStepper.step(OrbitalMotorStepPerRev);
+  }
+  if (Limit_Switch_OneState == HIGH || Limit_Switch_TwoState == HIGH) {
+  digitalWrite(Linear_ButtonPin,    LOW);
+  digitalWrite(Orbital_ButtonPin,   LOW);
+  digitalWrite(D_1_ButtonPin,       LOW);
+  digitalWrite(D_2_ButtonPin,       LOW);
+  digitalWrite(D_3_ButtonPin,       LOW);
+  digitalWrite(D_4_ButtonPin,       LOW);
+  digitalWrite(LinearMotorPin,      LOW);
+  digitalWrite(OrbitalMotorPin,     LOW);
+  digitalWrite(Emergency_StopPin,   LOW);
+  }
+  Emergency_StopState = digitalRead(Emergency_StopPin);
+  if (Emergency_StopState == HIGH) {
+  digitalWrite(Linear_ButtonPin,    LOW);
+  digitalWrite(Orbital_ButtonPin,   LOW);
+  digitalWrite(D_1_ButtonPin,       LOW);
+  digitalWrite(D_2_ButtonPin,       LOW);
+  digitalWrite(D_3_ButtonPin,       LOW);
+  digitalWrite(D_4_ButtonPin,       LOW);
+  digitalWrite(LinearMotorPin,      LOW);
+  digitalWrite(OrbitalMotorPin,     LOW);
+  digitalWrite(Emergency_StopPin,   LOW);
   }
 }
