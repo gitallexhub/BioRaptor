@@ -27,7 +27,7 @@ const int Emergency_StopPin       = 18;
 int totalOrbitalMotorStepCountFromInitialPosition = digitalRead(Rotary_Encoder_Pin);
 
   // Potentiometer is an analog input pin.
-#define Speed_PotentiometerPin      A0 
+#define Speed_PotentiometerPin A0;
 
   // Define motor pin sets.
 Stepper LinearStepper  = Stepper(LinearMotorStepPerRev, 9, 10, 11, 12);
@@ -75,7 +75,7 @@ void setup() {
   pinMode(D_2_ButtonPin,      INPUT);
   pinMode(D_3_ButtonPin,      INPUT);
   pinMode(D_4_ButtonPin,      INPUT);
-  pinMode(Emergency_StopPin,  INPUT
+  pinMode(Emergency_StopPin,  INPUT);
   
   // Set shaker controllers as outputs. 
   pinMode(LinearMotorPin, OUTPUT);
