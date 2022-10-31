@@ -95,13 +95,13 @@ void setup() {
       LinearStepper.setSpeed(LinearMotorSpeed);                             // Set linear motor speed to potentiometer input,
       LinearStepper.step(LinearMotorStepPerRev/100);                        // Send step command. ****NEEDS TO BE VERIFIED****
     }
-    if (Limit_Swtich_OneState = HIGH) {                                     // If limit switch one is closed,
+    if (Limit_Swtich_OneState == HIGH) {                                     // If limit switch one is closed,
       LinearStepper.setSpeed(-LinearMotorSpeed);                            // Change the direction of the motor
       LinearMotorSteps = stepCount;                                         // Define number of steps the linear motor takes as the step count
       stepCount = 0;                                                        // Set initial value of steps
       LinearStepper.step(LinearMotorStepPerRev/100);                        // Send step command. ****NEEDS TO BE VERIFIED****
     }
-    if (Limit_Switch_TwoState = HIGH) {                                     // If limit switch two is closed,
+    if (Limit_Switch_TwoState == HIGH) {                                     // If limit switch two is closed,
       NumberOfSteps = LinearMotorSteps/2;                                   // Divide number of steps taken from limit switch one to limit switch two by two,
       LinearStepper.setSpeed(LinearMotorSpeed);                             // Change motor direction,
       LinearStepper.step(NumberOfSteps/100);                                // Send step command, this should send the motor to halfway between the limit switches, i.e., the middle of the rail.
@@ -118,29 +118,29 @@ void setup() {
  D_4_ButtonState       = digitalRead(D_4_ButtonState); 
   
   // Shaking size selction (diamter). 
-  if (D_1_ButtonState = HIGH) {
+  if (D_1_ButtonState == HIGH) {
   X = D_1_NumberOfSteps;                     //***NEED ALL OF THESE TO DETERMINE THIS DISTANCE BY TEST***
     Y = D_1_SetUpSteps;                       
-  else if (D_2_ButtonState = HIGH)
+  else if (D_2_ButtonState == HIGH)
     X = D_2_NumberOfSteps;
     Y = D_2_SetUpSteps;
-    else if (D_3_ButtonState = HIGH)
+    else if (D_3_ButtonState == HIGH)
       X = D_3_NumberOfSteps;
       Y = D_3_SetUpSteps;
-    else if (D_4_ButtonState = HIGH)
+    else if (D_4_ButtonState == HIGH)
       X = D_4_NumberOfSteps;
       Y = D_4_SetUpSteps;
   }
-  if (Speed_PotentiometerState = HIGH) {
+  if (Speed_PotentiometerState == HIGH) {
       // Define motor speed.
   int Speed_PontentiometerState = analogRead(A0);
   MotorSpeed = map(Speed_PotentiometerState, 0, 1023, 0, 350);
   }
-  if (Linear_ButtonState = HIGH) {
+  if (Linear_ButtonState == HIGH) {
     i = j;
-    else if (Orbital_ButtonState = HIGH)
+    else if (Orbital_ButtonState == HIGH)
       i = k;
-    else if (Linear_ButtonState = HIGH && Orbital_ButtonState = HIGH)
+    else if (Linear_ButtonState == HIGH && Orbital_ButtonState == HIGH)
           i = m;
   }
 moderateSpeed = 20; 
