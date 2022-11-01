@@ -7,6 +7,9 @@
 
 LiquidCrystal_I2C lcd(0x27, 20, 4);
 
+  // Initialize chronological sequencing tool. 
+long TimeStamp;
+
   // Define steps per revolution of stepper motors (1.8 degrees per step, 360 degrees full rotation).
 const int LinearMotorStepPerRev  = 200; 
 const int OrbitalMotorStepPerRev = 200;
@@ -33,7 +36,7 @@ int totalOrbitalMotorStepCountFromInitialPosition = digitalRead(Rotary_Encoder_P
 Stepper LinearStepper  = Stepper(LinearMotorStepPerRev, 9, 10, 11, 12);
 Stepper OrbitalStepper = Stepper(OrbitalMotorStepPerRev, 13, 14, 15, 16);
 
-  // Assign state variable to user input buttons to define pushed or not pushed, limit switches closed or not open, these are not constant.
+  // Assign state variable to user input buttons to define pushed or not pushed, limit switches closed or not open, time, these are not constant.
 int Linear_ButtonState        = 0;
 int Orbital_ButtonState       = 0;
 int D_1_ButtonState           = 0;
@@ -44,6 +47,7 @@ int Limit_Switch_OneState     = 0;
 int Limit_Switch_TwoState     = 0;
 int Emergency_StopState       = 0;
 int Speed_PontentiometerState = 0;
+int SequenceTime              = 1000000;
 
   // Define step count. Not sure how this works.
 // int LinearMotorSteps      = 0;
@@ -82,12 +86,18 @@ void setup() {
   // Set shaker controllers as outputs. 
   pinMode(LinearMotorPin, OUTPUT);
   pinMode(OrbitalMotorPin,OUTPUT);
+  
+  // Set up timer.
+  startMillis = millis();
 
   
 }
 
 void loop() {
-// Linear motor zeroing sequence.
+    // Get current time. 
+  currentMillis = millis();
+  while (currentMillis > 0 && currentMillis =< 100) {
+    // Linear motor zeroing sequence.
     // Define states for linear motor, and both limit switches.
   Linear_ButtonState    = digitalRead(Linear_ButtonPin);
   Limit_Switch_OneState = digitalRead(Limit_Switch_OnePin);
@@ -106,7 +116,9 @@ void loop() {
       LinearStepper.step(50);                                               // Send step command, this should send the motor to halfway between the limit switches, i.e., the middle of the rail.
     }
   }
-  
+}
+ 
+while (currentMillis > 100 && currentMillis =< 500) {
   // Shaking pattern selection. 
   // Read inputs.
  Linear_ButtonState    = digitalRead(Linear_ButtonPin);
@@ -193,4 +205,9 @@ moderateSpeed = 20;
   digitalWrite(OrbitalMotorPin,     LOW);
   digitalWrite(Emergency_StopPin,   LOW);
   }
+  
+  // Reset timer to zero. 
+  
+  // Set infinite timer to make new inputs 
+  // Once new inputs are made, loop restarts
 }
