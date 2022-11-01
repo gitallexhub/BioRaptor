@@ -50,6 +50,7 @@ int Speed_PontentiometerState = 0;
 // int OrbitalMotorSteps     = 0;
  
 void setup() {
+  Serial.begin(9600);
   lcd.begin();
   lcd.backlight();
   lcd.clear();
@@ -82,7 +83,11 @@ void setup() {
   pinMode(LinearMotorPin, OUTPUT);
   pinMode(OrbitalMotorPin,OUTPUT);
 
-  // Linear motor zeroing sequence.
+  
+}
+
+void loop() {
+// Linear motor zeroing sequence.
     // Define states for linear motor, and both limit switches.
   Linear_ButtonState    = digitalRead(Linear_ButtonPin);
   Limit_Switch_OneState = digitalRead(Limit_Switch_OnePin);
@@ -138,10 +143,7 @@ void setup() {
           i = m;
   }
 moderateSpeed = 20; 
-}
-
-void loop() {
- // Read shaking pattern selection (linear, orbital, or double orbital), and set up for correct shaking size, and shaking speed.
+  // Read shaking pattern selection (linear, orbital, or double orbital), and set up for correct shaking size, and shaking speed.
   if (i == j) { // Linear shaking only.
    LinearStepper.setSpeed(MotorSpeed);
     LinearStepper.step(X);
