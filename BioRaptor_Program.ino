@@ -94,7 +94,7 @@ void loop() {
   // Get current time. 
   TimeStamp = millis();
   // Set five seconds for zeroing sequence.
-  while (TimeStamp > 0 && TimeStamp =< 5000) {
+  while (TimeStamp >= 0 && TimeStamp =< 5000) {
     // Linear motor zeroing sequence.
     // Define states for linear motor, and both limit switches.
   Linear_ButtonState    = digitalRead(Linear_ButtonPin);
@@ -115,8 +115,7 @@ void loop() {
     }
   }
 }
- //Set five seconds for computer to read shaking selections. 
-while (TimeStamp > 5000 && TimeStamp =< 10000) {
+ 
   // Shaking pattern selection. 
   // Read inputs.
  Linear_ButtonState    = digitalRead(Linear_ButtonPin);
@@ -127,6 +126,9 @@ while (TimeStamp > 5000 && TimeStamp =< 10000) {
  D_4_ButtonState       = digitalRead(D_4_ButtonState); 
   
   // Shaking size selction (diamter). 
+  // Set five seconds for selection.
+while (TimeStamp > 5000 && TimeStamp =<10000) {
+  // ALEX: Print on LED to make diameter selection.
   if (D_1_ButtonState == HIGH) {
   X = D_1_NumberOfSteps;                     //***NEED ALL OF THESE TO DETERMINE THIS DISTANCE BY TEST***
     Y = D_1_SetUpSteps;                       
@@ -140,11 +142,21 @@ while (TimeStamp > 5000 && TimeStamp =< 10000) {
       X = D_4_NumberOfSteps;
       Y = D_4_SetUpSteps;
   }
+}
+  // Set motor speed.
+  // Set five seconds for motor speed selection. 
+while (TimeStamp >10000 && TimeStamp =< 15000) {
+  // ALEX: Print on LED to make speed selection.
   if (Speed_PotentiometerState == HIGH) {
       // Define motor speed.
   int Speed_PontentiometerState = analogRead(A0);
   MotorSpeed = map(Speed_PotentiometerState, 0, 1023, 0, 350);
   }
+}
+  // Set shaking pattern. 
+  // Set five second for pattern selection.
+while (TimeStamp >15000 && TimeStamp =< 20000) {
+  // ALEX: Print on LED to make shape selection. 
   if (Linear_ButtonState == HIGH) {
     i = j;
     else if (Orbital_ButtonState == HIGH)
@@ -153,36 +165,85 @@ while (TimeStamp > 5000 && TimeStamp =< 10000) {
           i = m;
   }
 }
-moderateSpeed = 20; 
+
+//Define moderate speed for set up procedures. 
+moderateSpeed = 20;
+
 // Read shaking pattern selection (linear, orbital, or double orbital), and set up for correct shaking size, and shaking speed.
 if (i == j) { // Linear shaking only.
-  while (TimeStamp > 10000) { 
+  // Set indefinite time for shaking to carry out.
+  while (TimeStamp > 20000) { 
    LinearStepper.setSpeed(MotorSpeed);
     LinearStepper.step(X);
     LinearStepper.step(-X);
+    // Set stopping condition. 
+    if (Linear_ButtonState == HIGH) {
+  digitalWrite(Linear_ButtonPin,    LOW);
+  digitalWrite(Orbital_ButtonPin,   LOW);
+  digitalWrite(D_1_ButtonPin,       LOW);
+  digitalWrite(D_2_ButtonPin,       LOW);
+  digitalWrite(D_3_ButtonPin,       LOW);
+  digitalWrite(D_4_ButtonPin,       LOW);
+  digitalWrite(LinearMotorPin,      LOW);
+  digitalWrite(OrbitalMotorPin,     LOW);
+  digitalWrite(Emergency_StopPin,   LOW);
+      // IRELAND: add rotary encoder zeroing procedure, add reset timer, add send to start of loop. 
   }
-  else if (i == k) 
+  }
+  else if (i == k) // Orbital shaking only.
+    // Set indefinite shaking time.
+  while (TimeStamp > 20000) {
     OrbitalStepper.setSpeed(moderateSpeed);
     OrbitalStepper.step(-totalStepCountFromInitialPosition);
-    //HOLD FOR A SEC//
+    delay(3000);
     LinearStepper.setSpeed(moderateSpeed);
     LinearStepper.step(Y);
-    //TIMER: HOLD FOR A SEC//
+    delay(3000);
     OrbitalStepper.setSpeed(MotorSpeed);
     OrbitalStepper.step(OrbitalMotorStepPerRev);
-    else if (i == m)
+    if (Orbital_ButtonState == HIGH) {
+  digitalWrite(Linear_ButtonPin,    LOW);
+  digitalWrite(Orbital_ButtonPin,   LOW);
+  digitalWrite(D_1_ButtonPin,       LOW);
+  digitalWrite(D_2_ButtonPin,       LOW);
+  digitalWrite(D_3_ButtonPin,       LOW);
+  digitalWrite(D_4_ButtonPin,       LOW);
+  digitalWrite(LinearMotorPin,      LOW);
+  digitalWrite(OrbitalMotorPin,     LOW);
+  digitalWrite(Emergency_StopPin,   LOW);
+      // IRELAND: add rotary encoder zeroing procedure, add timer reset, add send to start of loop.
+  }  
+  }
+    else if (i == m) // Double orbital shaking.
+      // Set indefinite shaking time.
+      while (TimeStamp > 20000) {
       OrbitalStepper.setSpeed(moderateSpeed);
       OrbitalStepper.step(-totalStepCountFromInitialPosition);
-      //HOLD FOR A SEC//
+      delay(3000);
       LinearStepper.setSpeed(moderateSpeed);
       LinearStepper.step(Y);
-      //HOLD//
+      delay(3000);
       LinearStepper.setSpeed(MotorSpeed);
       OrbitalStepper.setSpeed(MotorSpeed)
       LinearStepper.step(X);
       LinearStepper.step(-X);
       OrbitalStepper.step(OrbitalMotorStepPerRev);
+        if (Orbital_ButtonState == HIGH || Linear_ButtonState == HIGH) {
+  digitalWrite(Linear_ButtonPin,    LOW);
+  digitalWrite(Orbital_ButtonPin,   LOW);
+  digitalWrite(D_1_ButtonPin,       LOW);
+  digitalWrite(D_2_ButtonPin,       LOW);
+  digitalWrite(D_3_ButtonPin,       LOW);
+  digitalWrite(D_4_ButtonPin,       LOW);
+  digitalWrite(LinearMotorPin,      LOW);
+  digitalWrite(OrbitalMotorPin,     LOW);
+  digitalWrite(Emergency_StopPin,   LOW);
+          // IRELAND: add rotary encoder zeroing procedure, add timer reset, send to start of loop.
+        }
+      }
   }
+  
+  // Emergency stop sequence via limit switch detection.
   if (Limit_Switch_OneState == HIGH || Limit_Switch_TwoState == HIGH) {
   digitalWrite(Linear_ButtonPin,    LOW);
   digitalWrite(Orbital_ButtonPin,   LOW);
@@ -194,6 +255,8 @@ if (i == j) { // Linear shaking only.
   digitalWrite(OrbitalMotorPin,     LOW);
   digitalWrite(Emergency_StopPin,   LOW);
   }
+
+  // Emergency stop sequence via user stop. 
   Emergency_StopState = digitalRead(Emergency_StopPin);
   if (Emergency_StopState == HIGH) {
   digitalWrite(Linear_ButtonPin,    LOW);
@@ -206,9 +269,4 @@ if (i == j) { // Linear shaking only.
   digitalWrite(OrbitalMotorPin,     LOW);
   digitalWrite(Emergency_StopPin,   LOW);
   }
-  
-  // Reset timer to zero. 
-  
-  // Set infinite timer to make new inputs 
-  // Once new inputs are made, loop restarts
 }
