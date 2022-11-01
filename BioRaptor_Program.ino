@@ -8,7 +8,7 @@
 LiquidCrystal_I2C lcd(0x27, 20, 4);
 
   // Initialize chronological sequencing tool. 
-long TimeStamp;
+unsigned long TimeStamp;
 
   // Define steps per revolution of stepper motors (1.8 degrees per step, 360 degrees full rotation).
 const int LinearMotorStepPerRev  = 200; 
@@ -86,17 +86,15 @@ void setup() {
   // Set shaker controllers as outputs. 
   pinMode(LinearMotorPin, OUTPUT);
   pinMode(OrbitalMotorPin,OUTPUT);
-  
-  // Set up timer.
-  startMillis = millis();
 
   
 }
 
 void loop() {
-    // Get current time. 
-  currentMillis = millis();
-  while (currentMillis > 0 && currentMillis =< 100) {
+  // Get current time. 
+  TimeStamp = millis();
+  // Set five seconds for zeroing sequence.
+  while (TimeStamp > 0 && TimeStamp =< 5000) {
     // Linear motor zeroing sequence.
     // Define states for linear motor, and both limit switches.
   Linear_ButtonState    = digitalRead(Linear_ButtonPin);
@@ -117,8 +115,8 @@ void loop() {
     }
   }
 }
- 
-while (currentMillis > 100 && currentMillis =< 500) {
+ //Set five seconds for computer to read shaking selections. 
+while (TimeStamp > 5000 && TimeStamp =< 10000) {
   // Shaking pattern selection. 
   // Read inputs.
  Linear_ButtonState    = digitalRead(Linear_ButtonPin);
@@ -154,12 +152,15 @@ while (currentMillis > 100 && currentMillis =< 500) {
     else if (Linear_ButtonState == HIGH && Orbital_ButtonState == HIGH)
           i = m;
   }
+}
 moderateSpeed = 20; 
-  // Read shaking pattern selection (linear, orbital, or double orbital), and set up for correct shaking size, and shaking speed.
-  if (i == j) { // Linear shaking only.
+// Read shaking pattern selection (linear, orbital, or double orbital), and set up for correct shaking size, and shaking speed.
+if (i == j) { // Linear shaking only.
+  while (TimeStamp > 10000) { 
    LinearStepper.setSpeed(MotorSpeed);
     LinearStepper.step(X);
     LinearStepper.step(-X);
+  }
   else if (i == k) 
     OrbitalStepper.setSpeed(moderateSpeed);
     OrbitalStepper.step(-totalStepCountFromInitialPosition);
