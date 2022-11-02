@@ -55,11 +55,7 @@ int SequenceTime              = 1000000;
  
 void setup() {
   Serial.begin(9600);
-  lcd.begin();
-  lcd.backlight();
-  lcd.clear();
-  lcd.setCursor(0,0);
-  lcd.print("Testing...");
+  
   
   // Set intial state as off for all controllers.
   digitalWrite(Linear_ButtonPin,    LOW);
@@ -82,6 +78,8 @@ void setup() {
   pinMode(D_3_ButtonPin,      INPUT);
   pinMode(D_4_ButtonPin,      INPUT);
   pinMode(Emergency_StopPin,  INPUT);
+  pinMode(Limit_Switch_OnePin, INPUT);
+  pinMode(Limit_Switch_TwoPin, INPUT);
   
   // Set shaker controllers as outputs. 
   pinMode(LinearMotorPin, OUTPUT);
@@ -91,6 +89,14 @@ void setup() {
 }
 
 void loop() {
+  
+  
+  
+  
+  
+  
+  
+  
   // Get current time. 
   TimeStamp = millis();
   // Set five seconds for zeroing sequence.
@@ -100,7 +106,7 @@ void loop() {
   Linear_ButtonState    = digitalRead(Linear_ButtonPin);
   Limit_Switch_OneState = digitalRead(Limit_Switch_OnePin);
   Limit_Switch_TwoState = digitalRead(Limit_Switch_TwoPin);
-  Speed_PontentiometerState = analogRead(A0);
+  Speed_PontentiometerState = analogRead(0);
  
     // While loop for horizontal homing.
   while (Limit_Switch_TwoState != HIGH) {                                   // While limit switch one is open,
