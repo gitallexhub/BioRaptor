@@ -89,14 +89,7 @@ void setup() {
 }
 
 void loop() {
-  
-  
-  
-  
-  
-  
-  
-  
+
   // Get current time. 
   TimeStamp = millis();
   // Set five seconds for zeroing sequence.
@@ -193,6 +186,10 @@ if (i == j) { // Linear shaking only.
   digitalWrite(LinearMotorPin,      LOW);
   digitalWrite(OrbitalMotorPin,     LOW);
   digitalWrite(Emergency_StopPin,   LOW);
+  // Reset timer.
+  TimeStamp = 0;
+  // Exit loop.
+  exit(0);
       // IRELAND: add rotary encoder zeroing procedure, add reset timer, add send to start of loop. 
   }
   }
@@ -208,6 +205,7 @@ if (i == j) { // Linear shaking only.
     OrbitalStepper.setSpeed(MotorSpeed);
     OrbitalStepper.step(OrbitalMotorStepPerRev);
     if (Orbital_ButtonState == HIGH) {
+  //stop all motion
   digitalWrite(Linear_ButtonPin,    LOW);
   digitalWrite(Orbital_ButtonPin,   LOW);
   digitalWrite(D_1_ButtonPin,       LOW);
@@ -217,7 +215,19 @@ if (i == j) { // Linear shaking only.
   digitalWrite(LinearMotorPin,      LOW);
   digitalWrite(OrbitalMotorPin,     LOW);
   digitalWrite(Emergency_StopPin,   LOW);
-      // IRELAND: add rotary encoder zeroing procedure, add timer reset, add send to start of loop.
+  // pause 
+  delay(3000);
+  // Zero orbital motor
+  // Remove orbital motor shaft from diameter selction. If it is D1, it will just be zero steps horizontally
+  OrbitalStepper.setSpeed(moderateSpeed);
+  OrbitalStepper.step(-totalStepCountFromInitialPosition); 
+  delay(3000);
+  LinearStepper.setSpeed(moderateSpeed);
+  LinearStepper.step(-Y);
+  // Reset timer.
+  TimeStamp = 0;
+  // Exit loop
+  exit(0);
   }  
   }
     else if (i == m) // Double orbital shaking.
@@ -244,7 +254,19 @@ if (i == j) { // Linear shaking only.
   digitalWrite(LinearMotorPin,      LOW);
   digitalWrite(OrbitalMotorPin,     LOW);
   digitalWrite(Emergency_StopPin,   LOW);
-          // IRELAND: add rotary encoder zeroing procedure, add timer reset, send to start of loop.
+  // pause 
+  delay(3000);
+  // Zero orbital motor
+  // Remove orbital motor shaft from diameter selction. If it is D1, it will just be zero steps horizontally
+  OrbitalStepper.setSpeed(moderateSpeed);
+  OrbitalStepper.step(-totalStepCountFromInitialPosition); 
+  delay(3000);
+  LinearStepper.setSpeed(moderateSpeed);
+  LinearStepper.step(-Y);
+  // Reset timer.
+  TimeStamp = 0;
+  // Exit loop
+  exit(0);
         }
       }
   }
