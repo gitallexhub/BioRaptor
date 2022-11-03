@@ -15,14 +15,14 @@ const int LinearMotorStepPerRev  = 200;
 const int OrbitalMotorStepPerRev = 200;
   
   // Assign pin number to controllers, these are constant values.  
-const int Linear_ButtonPin        = 1;
-const int Orbital_ButtonPin       = 2;
+const int Linear_ButtonPin        = 1; //A2
+const int Orbital_ButtonPin       = 2; //A1
 const int D_1_ButtonPin           = 3; 
 const int D_2_ButtonPin           = 4;
 const int D_3_ButtonPin           = 5;
 const int D_4_ButtonPin           = 6;
-const int Limit_Switch_OnePin     = 7;
-const int Limit_Switch_TwoPin     = 8;
+const int Limit_Switch_OnePin     = 8; //A3
+const int Limit_Switch_TwoPin     = 7; //D7
 const int Rotary_Encoder_Pin      = 17;
 const int Emergency_StopPin       = 18;
 
@@ -162,7 +162,7 @@ while (TimeStamp >10000 && TimeStamp =< 15000) {
   // print countdown
   if (Speed_PotentiometerState == HIGH) {
       // Define motor speed.
-  int Speed_PontentiometerState = analogRead(A0);
+  int Speed_PontentiometerState = analogRead(0);
   MotorSpeed = map(Speed_PotentiometerState, 0, 1023, 0, 350);
   }
 }
