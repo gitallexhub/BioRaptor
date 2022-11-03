@@ -130,16 +130,16 @@ while (TimeStamp > 5000 && TimeStamp =<10000) {
   // ALEX: Print on LED to make diameter selection.
   if (D_1_ButtonState == HIGH) {
   X = D_1_NumberOfSteps;                     //***NEED ALL OF THESE TO DETERMINE THIS DISTANCE BY TEST***
-    Y = D_1_SetUpSteps;                       
+    Y = 0;                       
   else if (D_2_ButtonState == HIGH)
     X = D_2_NumberOfSteps;
-    Y = D_2_SetUpSteps;
+    Y = 0; //Set up steps
     else if (D_3_ButtonState == HIGH)
       X = D_3_NumberOfSteps;
-      Y = D_3_SetUpSteps;
+      Y = 13.858; //Set up steps
     else if (D_4_ButtonState == HIGH)
       X = D_4_NumberOfSteps;
-      Y = D_4_SetUpSteps;
+      Y = 27.7165; //Set up steps
   }
 }
   // Set motor speed.
