@@ -72,8 +72,8 @@ void setup() {
   digitalWrite(D_2_ButtonPin,       LOW);
   digitalWrite(D_3_ButtonPin,       LOW);
   digitalWrite(D_4_ButtonPin,       LOW);
-  digitalWrite(LinearMotorPin,      LOW);
-  digitalWrite(OrbitalMotorPin,     LOW);
+  digitalWrite(LinearStepper,      LOW);
+  digitalWrite(OrbitalStepper,     LOW);
   digitalWrite(Limit_Switch_OnePin, LOW);
   digitalWrite(Limit_Switch_TwoPin, LOW);
   digitalWrite(Emergency_StopPin,   LOW);
@@ -92,8 +92,8 @@ void setup() {
   
   
   // Set shaker controllers as outputs. 
-  pinMode(LinearMotorPin, OUTPUT);
-  pinMode(OrbitalMotorPin,OUTPUT);
+  pinMode(LinearStepper, OUTPUT);
+  pinMode(OrbitalStepper,OUTPUT);
 
   
 }
