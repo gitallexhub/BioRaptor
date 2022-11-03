@@ -47,7 +47,6 @@ int Limit_Switch_OneState     = 0;
 int Limit_Switch_TwoState     = 0;
 int Emergency_StopState       = 0;
 int Speed_PontentiometerState = 0;
-int SequenceTime              = 1000000;
 
   // Define step count. Not sure how this works.
 // int LinearMotorSteps      = 0;
