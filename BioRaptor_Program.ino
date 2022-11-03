@@ -29,8 +29,7 @@ const int Emergency_StopPin       = 18;
   // Define orbital zero position. ****PHYSICAL INITIAL POSITION SET FROM TEST****
 int totalOrbitalMotorStepCountFromInitialPosition = digitalRead(Rotary_Encoder_Pin);
 
-  // Potentiometer is an analog input pin.
-#define Speed_PotentiometerPin A0;
+  // Potentiometer is 
 
   // Define motor pin sets.
 Stepper LinearStepper  = Stepper(LinearMotorStepPerRev, 9, 10, 11, 12);
@@ -47,6 +46,8 @@ int Limit_Switch_OneState     = 0;
 int Limit_Switch_TwoState     = 0;
 int Emergency_StopState       = 0;
 int Speed_PontentiometerState = 0;
+int potValue                  = 0;
+int TrxpotValue               = 0;
 
   // Define step count. Not sure how this works.
 // int LinearMotorSteps      = 0;
@@ -54,6 +55,14 @@ int Speed_PontentiometerState = 0;
  
 void setup() {
   Serial.begin(9600);
+  lcd.begin();
+  lcd.backlight();
+  lcd.print("Starting System");
+  delay(1500);
+  lcd.clear();
+  lcd.print("System On");
+  delay(1000);
+  lcd.clear();
   
   
   // Set intial state as off for all controllers.
@@ -79,6 +88,8 @@ void setup() {
   pinMode(Emergency_StopPin,  INPUT);
   pinMode(Limit_Switch_OnePin, INPUT);
   pinMode(Limit_Switch_TwoPin, INPUT);
+  pinMode(A0,                 INPUT);
+  
   
   // Set shaker controllers as outputs. 
   pinMode(LinearMotorPin, OUTPUT);
@@ -125,10 +136,12 @@ void loop() {
   
   // Shaking size selction (diamter). 
   // Set five seconds for selection.
+  //Print on LCD "make diameter selection"
+// delay(3000);
 while (TimeStamp > 5000 && TimeStamp =<10000) {
-  // ALEX: Print on LED to make diameter selection.
+  // Print on LCD countdown
   if (D_1_ButtonState == HIGH) {
-  X = 15.748; //D_1_NumberOfSteps                   //***NEED ALL OF THESE TO DETERMINE THIS DISTANCE BY TEST***
+  X = 0; //D_1_NumberOfSteps                   //***NEED ALL OF THESE TO DETERMINE THIS DISTANCE BY TEST***
     Y = 0;                       
   else if (D_2_ButtonState == HIGH)
     X = 15.748; //D_2_NumberOfSteps
@@ -143,8 +156,10 @@ while (TimeStamp > 5000 && TimeStamp =<10000) {
 }
   // Set motor speed.
   // Set five seconds for motor speed selection. 
+// print "make speed selection"
+//delay(3000);
 while (TimeStamp >10000 && TimeStamp =< 15000) {
-  // ALEX: Print on LED to make speed selection.
+  // print countdown
   if (Speed_PotentiometerState == HIGH) {
       // Define motor speed.
   int Speed_PontentiometerState = analogRead(A0);
@@ -154,7 +169,7 @@ while (TimeStamp >10000 && TimeStamp =< 15000) {
   // Set shaking pattern. 
   // Set five second for pattern selection.
 while (TimeStamp >15000 && TimeStamp =< 20000) {
-  // ALEX: Print on LED to make shape selection. 
+  // ALEX: Print on LCD to make shape selection. 
   if (Linear_ButtonState == HIGH) {
     i = j;
     else if (Orbital_ButtonState == HIGH)
