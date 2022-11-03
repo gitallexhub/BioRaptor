@@ -129,16 +129,16 @@ void loop() {
 while (TimeStamp > 5000 && TimeStamp =<10000) {
   // ALEX: Print on LED to make diameter selection.
   if (D_1_ButtonState == HIGH) {
-  X = D_1_NumberOfSteps;                     //***NEED ALL OF THESE TO DETERMINE THIS DISTANCE BY TEST***
+  X = 15.748; //D_1_NumberOfSteps                   //***NEED ALL OF THESE TO DETERMINE THIS DISTANCE BY TEST***
     Y = 0;                       
   else if (D_2_ButtonState == HIGH)
-    X = D_2_NumberOfSteps;
+    X = 15.748; //D_2_NumberOfSteps
     Y = 0; //Set up steps
     else if (D_3_ButtonState == HIGH)
-      X = D_3_NumberOfSteps;
+      X = 30.177; //D_3_NumberOfSteps
       Y = 13.858; //Set up steps
     else if (D_4_ButtonState == HIGH)
-      X = D_4_NumberOfSteps;
+      X = 43.858; //D_4_NumberOfSteps
       Y = 27.7165; //Set up steps
   }
 }
