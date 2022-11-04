@@ -83,16 +83,18 @@ void setup() {
 
   
   // Set user controllers as inputs.
-  pinMode(Linear_ButtonPin,   INPUT);
-  pinMode(Orbital_ButtonPin,  INPUT);
-  pinMode(D_1_ButtonPin,      INPUT);
-  pinMode(D_2_ButtonPin,      INPUT);
-  pinMode(D_3_ButtonPin,      INPUT);
-  pinMode(D_4_ButtonPin,      INPUT);
-  pinMode(Emergency_StopPin,  INPUT);
-  pinMode(Limit_Switch_OnePin, INPUT);
-  pinMode(Limit_Switch_TwoPin, INPUT);
-  pinMode(A0,                 INPUT);
+  pinMode(Linear_ButtonPin,        INPUT);
+  pinMode(Orbital_ButtonPin,       INPUT);
+  pinMode(D_1_ButtonPin,           INPUT);
+  pinMode(D_2_ButtonPin,           INPUT);
+  pinMode(D_3_ButtonPin,           INPUT);
+  pinMode(D_4_ButtonPin,           INPUT);
+  pinMode(Emergency_StopPin,       INPUT);
+  pinMode(Limit_Switch_OnePin,     INPUT);
+  pinMode(Limit_Switch_TwoPin,     INPUT);
+  pinMode(A0,                      INPUT);
+  pinMode(Rotary_Encoder_ClickPin, INPUT):
+  pinMode(Rotary_Encoder_DirPin,   INPUT);
   
   
   // Set shaker controllers as outputs. 
