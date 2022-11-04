@@ -1,4 +1,4 @@
-  // Program for BioRaptor controls.
+// Program for BioRaptor controls.
 
   // Include stepper motor toolbox.
  #include <Stepper.h>
@@ -15,7 +15,7 @@ const int LinearMotorStepPerRev  = 200;
 const int OrbitalMotorStepPerRev = 200;
   
   // Assign pin number to controllers, these are constant values.  
-const int Linear_ButtonPin        = 1; //A2
+const int Linear_ButtonPin        = 2;
 const int Orbital_ButtonPin       = 2; //A1
 const int D_1_ButtonPin           = 3; 
 const int D_2_ButtonPin           = 4;
@@ -26,14 +26,19 @@ const int Limit_Switch_TwoPin     = 7; //D7
 const int Rotary_Encoder_Pin      = 17;
 const int Emergency_StopPin       = 18;
 
+//Encoder Pins Defined
+
+
+
+
   // Define orbital zero position. ****PHYSICAL INITIAL POSITION SET FROM TEST****
 int totalOrbitalMotorStepCountFromInitialPosition = digitalRead(Rotary_Encoder_Pin);
 
   // Potentiometer is 
 
   // Define motor pin sets.
-Stepper LinearStepper  = Stepper(LinearMotorStepPerRev, 9, 10, 11, 12);
-Stepper OrbitalStepper = Stepper(OrbitalMotorStepPerRev, 13, 14, 15, 16);
+Stepper  LinearMotor  = Stepper(LinearMotorStepPerRev, 9, 10, 11, 12);
+Stepper OrbitalMotor = Stepper(OrbitalMotorStepPerRev, 13, 14, 15, 16);
 
   // Assign state variable to user input buttons to define pushed or not pushed, limit switches closed or not open, time, these are not constant.
 int Linear_ButtonState        = 0;
@@ -45,10 +50,12 @@ int D_4_ButtonState           = 0;
 int Limit_Switch_OneState     = 0;
 int Limit_Switch_TwoState     = 0;
 int Emergency_StopState       = 0;
-int Speed_PontentiometerState = 0;
+int Speed_PotState = 0;
 int potValue                  = 0;
 int TrxpotValue               = 0;
-
+int  X                        = 0;
+int  Y                        = 0;
+int MotorSpeed                = 0;
   // Define step count. Not sure how this works.
 // int LinearMotorSteps      = 0;
 // int OrbitalMotorSteps     = 0;
@@ -72,11 +79,10 @@ void setup() {
   digitalWrite(D_2_ButtonPin,       LOW);
   digitalWrite(D_3_ButtonPin,       LOW);
   digitalWrite(D_4_ButtonPin,       LOW);
-  digitalWrite(LinearStepper,      LOW);
-  digitalWrite(OrbitalStepper,     LOW);
   digitalWrite(Limit_Switch_OnePin, LOW);
   digitalWrite(Limit_Switch_TwoPin, LOW);
   digitalWrite(Emergency_StopPin,   LOW);
+
   
   // Set user controllers as inputs.
   pinMode(Linear_ButtonPin,   INPUT);
@@ -92,10 +98,9 @@ void setup() {
   
   
   // Set shaker controllers as outputs. 
-  pinMode(LinearStepper, OUTPUT);
-  pinMode(OrbitalStepper,OUTPUT);
+ // pinMode(LinearMotor, OUTPUT);
+ // pinMode(OrbitalMotor,OUTPUT);
 
-  
 }
 
 void loop() {
@@ -103,27 +108,27 @@ void loop() {
   // Get current time. 
   TimeStamp = millis();
   // Set five seconds for zeroing sequence.
-  while (TimeStamp >= 0 && TimeStamp =< 5000) {
+  while (TimeStamp >= 0 && TimeStamp <= 5000) {
     // Linear motor zeroing sequence.
     // Define states for linear motor, and both limit switches.
   Linear_ButtonState    = digitalRead(Linear_ButtonPin);
   Limit_Switch_OneState = digitalRead(Limit_Switch_OnePin);
   Limit_Switch_TwoState = digitalRead(Limit_Switch_TwoPin);
-  Speed_PontentiometerState = analogRead(0);
+  Speed_PotState = analogRead(0);
  
     // While loop for horizontal homing.
   while (Limit_Switch_TwoState != HIGH) {                                   // While limit switch one is open,
-      moderateSpeed = 20;                                                   // Set moderate motor speed
-      LinearStepper.setSpeed(-moderateSpeed);                               // Set linear motor speed to potentiometer input,
-      LinearStepper.step(LinearMotorStepPerRev/100);                        // Send step command. **** DIRECTION NEEDS TO BE VERIFIED****
+      //moderateSpeed = 20;                                                   // Set moderate motor speed
+      LinearMotor.setSpeed(-20);                               // Set linear motor speed to potentiometer input,
+      LinearMotor.step(LinearMotorStepPerRev/100);                        // Send step command. **** DIRECTION NEEDS TO BE VERIFIED****
     }
     if (Limit_Switch_TwoState == HIGH) {                                    // If limit switch two is closed, (while loop ends and thus, motor should stop stepping
-      NumberOfSteps = 50;                                                   // Set number of steps to the halfway point (as measured through computation/test),
-      LinearStepper.setSpeed(LinearMotorSpeed);                             // Change motor direction,
-      LinearStepper.step(50);                                               // Send step command, this should send the motor to halfway between the limit switches, i.e., the middle of the rail.
+    //  NumberOfSteps = 50;                                                   // Set number of steps to the halfway point (as measured through computation/test),
+      LinearMotor.setSpeed(20);                                     // Change motor direction,
+      LinearMotor.step(50);                                               // Send step command, this should send the motor to halfway between the limit switches, i.e., the middle of the rail.
     }
   }
-}
+
  
   // Shaking pattern selection. 
   // Read inputs.
@@ -137,46 +142,54 @@ void loop() {
   // Shaking size selction (diamter). 
   // Set five seconds for selection.
   //Print on LCD "make diameter selection"
-// delay(3000);
-while (TimeStamp > 5000 && TimeStamp =<10000) {
-  // Print on LCD countdown
-  if (D_1_ButtonState == HIGH) {
-  X = 0; //D_1_NumberOfSteps                   //***NEED ALL OF THESE TO DETERMINE THIS DISTANCE BY TEST***
-    Y = 0;                       
-  else if (D_2_ButtonState == HIGH)
-    X = 15.748; //D_2_NumberOfSteps
-    Y = 0; //Set up steps
-    else if (D_3_ButtonState == HIGH)
+  // delay(3000);
+
+
+  while (TimeStamp > 5000 && TimeStamp <=10000) {
+          // Print on LCD countdown
+    if (D_1_ButtonState == HIGH) {
+      X = 0; //D_1_NumberOfSteps                   //***NEED ALL OF THESE TO DETERMINE THIS DISTANCE BY TEST***
+      Y = 0;
+    }                       
+    else if (D_2_ButtonState == HIGH){
+      X = 15.748; //D_2_NumberOfSteps
+      Y = 0; //Set up steps
+    }
+    else if (D_3_ButtonState == HIGH){
       X = 30.177; //D_3_NumberOfSteps
       Y = 13.858; //Set up steps
-    else if (D_4_ButtonState == HIGH)
+    }
+    else if (D_4_ButtonState == HIGH){
       X = 43.858; //D_4_NumberOfSteps
       Y = 27.7165; //Set up steps
+    }
   }
-}
-  // Set motor speed.
-  // Set five seconds for motor speed selection. 
-// print "make speed selection"
-//delay(3000);
-while (TimeStamp >10000 && TimeStamp =< 15000) {
-  // print countdown
-  if (Speed_PotentiometerState == HIGH) {
-      // Define motor speed.
-  int Speed_PontentiometerState = analogRead(0);
-  MotorSpeed = map(Speed_PotentiometerState, 0, 1023, 0, 350);
-  }
-}
-  // Set shaking pattern. 
-  // Set five second for pattern selection.
-while (TimeStamp >15000 && TimeStamp =< 20000) {
-  // ALEX: Print on LCD to make shape selection. 
-  if (Linear_ButtonState == HIGH) {
-    i = j;
-    else if (Orbital_ButtonState == HIGH)
+
+      // Set motor speed.
+      // Set five seconds for motor speed selection. 
+      // print "make speed selection"
+      //delay(3000);
+  while (TimeStamp >10000 && TimeStamp <= 15000) {
+        // print countdown
+    if (Speed_PotState == HIGH) {
+        // Define motor speed.
+        int Speed_PontentiometerState = analogRead(0);
+        MotorSpeed = map(Speed_PotState, 0, 1023, 0, 350);
+      }
+    }
+      // Set shaking pattern. 
+      // Set five second for pattern selection.
+  while (TimeStamp >15000 && TimeStamp <= 20000) {
+       // ALEX: Print on LCD to make shape selection. 
+    if (Linear_ButtonState == HIGH) {
+      i = j;
+    }
+    else if (Orbital_ButtonState == HIGH){
       i = k;
+    }
     else if (Linear_ButtonState == HIGH && Orbital_ButtonState == HIGH)
           i = m;
-  }
+    }
 }
 
 //Define moderate speed for set up procedures. 
