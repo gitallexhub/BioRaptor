@@ -15,24 +15,22 @@ const int LinearMotorStepPerRev  = 200;
 const int OrbitalMotorStepPerRev = 200;
   
   // Assign pin number to controllers, these are constant values.  
-const int Linear_ButtonPin        = 2;
-const int Orbital_ButtonPin       = 2; //A1
-const int D_1_ButtonPin           = 3; 
-const int D_2_ButtonPin           = 4;
-const int D_3_ButtonPin           = 5;
-const int D_4_ButtonPin           = 6;
-const int Limit_Switch_OnePin     = 8; //A3
-const int Limit_Switch_TwoPin     = 7; //D7
-const int Rotary_Encoder_Pin      = 17;
-const int Emergency_StopPin       = 18;
+const int Linear_ButtonPin          = 2;
+const int Orbital_ButtonPin         = 2; //A1
+const int D_1_ButtonPin             = 3; 
+const int D_2_ButtonPin             = 4;
+const int D_3_ButtonPin             = 5;
+const int D_4_ButtonPin             = 6;
+const int Limit_Switch_OnePin       = 8; //A3
+const int Limit_Switch_TwoPin       = 7; //D7
+const int Rotary_Encoder_ClickPin   = 17;
+const int Emergency_StopPin         = 18;
+const int Rotary_Encoder_DirPin     = 19;
 
 //Encoder Pins Defined
-
-
-
-
   // Define orbital zero position. ****PHYSICAL INITIAL POSITION SET FROM TEST****
-int totalOrbitalMotorStepCountFromInitialPosition = digitalRead(Rotary_Encoder_Pin);
+int totalOrbitalMotorStepCountFromInitialPosition = digitalRead(Rotary_Encoder_ClickPin);
+int CurrentMotorDirection                         = digitalRead(Rotary_Encoder_DirPin);
 
   // Potentiometer is 
 
