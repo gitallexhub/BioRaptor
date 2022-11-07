@@ -15,16 +15,19 @@ const int LinearMotorStepPerRev  = 200;
 const int OrbitalMotorStepPerRev = 200;
   
   // Assign pin number to controllers, these are constant values.  
-const int Linear_ButtonPin        = 1; //A2
-const int Orbital_ButtonPin       = 2; //A1
-const int D_1_ButtonPin           = 3; 
-const int D_2_ButtonPin           = 4;
-const int D_3_ButtonPin           = 5;
-const int D_4_ButtonPin           = 6;
-const int Limit_Switch_OnePin     = 8; //A3
-const int Limit_Switch_TwoPin     = 7; //D7
-const int Rotary_Encoder_Pin      = 17;
+const int Linear_ButtonPin        = 1; //A3
+const int Orbital_ButtonPin       = 2; //A6
+const int D_1_ButtonPin           = 3; //REMOVE
+const int D_2_ButtonPin           = 4; //A0
+const int D_3_ButtonPin           = 5; //A1
+const int D_4_ButtonPin           = 6; //A2
+const int Limit_Switch_OnePin     = 4; //ACTUAL
+const int Limit_Switch_TwoPin     = 5; //ACTUAL
+const int Rotary_Encoder_Pin      = 17; 
 const int Emergency_StopPin       = 18;
+// potentiometer pin = A7 ACTUAL
+//LCD = A4, A5 ACTUAL
+//Rotary encoder = D4, D5, D6 ACTUAL 
 
   // Define orbital zero position. ****PHYSICAL INITIAL POSITION SET FROM TEST****
 int totalOrbitalMotorStepCountFromInitialPosition = digitalRead(Rotary_Encoder_Pin);
@@ -32,8 +35,8 @@ int totalOrbitalMotorStepCountFromInitialPosition = digitalRead(Rotary_Encoder_P
   // Potentiometer is 
 
   // Define motor pin sets.
-Stepper LinearStepper  = Stepper(LinearMotorStepPerRev, 9, 10, 11, 12);
-Stepper OrbitalStepper = Stepper(OrbitalMotorStepPerRev, 13, 14, 15, 16);
+Stepper LinearStepper  = Stepper(LinearMotorStepPerRev, 2, 3); //ACTUAL, lower number is step, higher is direction
+Stepper OrbitalStepper = Stepper(OrbitalMotorStepPerRev, 11, 12); //ACTUAL
 
   // Assign state variable to user input buttons to define pushed or not pushed, limit switches closed or not open, time, these are not constant.
 int Linear_ButtonState        = 0;
