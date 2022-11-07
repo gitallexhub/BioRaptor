@@ -27,7 +27,7 @@ const int Rotary_Encoder_Pin      = 17;
 const int Emergency_StopPin       = 18;
 // potentiometer pin = A7 ACTUAL
 //LCD = A4, A5 ACTUAL
-//Rotary encoder = D4, D5, D6 ACTUAL 
+//Rotary encoder = D6, D7, D8 ACTUAL 
 
   // Define orbital zero position. ****PHYSICAL INITIAL POSITION SET FROM TEST****
 int totalOrbitalMotorStepCountFromInitialPosition = digitalRead(Rotary_Encoder_Pin);
