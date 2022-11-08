@@ -15,17 +15,17 @@ const int LinearMotorStepPerRev  = 200;
 const int OrbitalMotorStepPerRev = 200;
   
   // Assign pin number to controllers, these are constant values.  
-const int Linear_ButtonPin          = 2;
-const int Orbital_ButtonPin         = 2; //A1
-const int D_1_ButtonPin             = 3; 
-const int D_2_ButtonPin             = 4;
-const int D_3_ButtonPin             = 5;
-const int D_4_ButtonPin             = 6;
-const int Limit_Switch_OnePin       = 8; //A3
-const int Limit_Switch_TwoPin       = 7; //D7
-const int Rotary_Encoder_ClickPin   = 17;
-const int Emergency_StopPin         = 18;
-const int Rotary_Encoder_DirPin     = 19;
+const int Linear_ButtonPin          = A3;
+const int Orbital_ButtonPin         = A6;
+const int D_1_ButtonPin             = A0; 
+const int D_2_ButtonPin             = A1;
+const int D_3_ButtonPin             = A2;
+const int Limit_Switch_OnePin       = 4;
+const int Limit_Switch_TwoPin       = 5;
+const int Rotary_Encoder_ClickPin   = D6;
+const int Rotary_Encoder_DirPin     = D7;
+//LCD = A4, A5 ACTUAL
+//Potentiometer = A7 ACTUAL
 
 //Encoder Pins Defined
   // Define orbital zero position. ****PHYSICAL INITIAL POSITION SET FROM TEST****
@@ -35,8 +35,8 @@ int CurrentMotorDirection                         = digitalRead(Rotary_Encoder_D
   // Potentiometer is 
 
   // Define motor pin sets.
-Stepper  LinearMotor  = Stepper(LinearMotorStepPerRev, 9, 10, 11, 12);
-Stepper OrbitalMotor = Stepper(OrbitalMotorStepPerRev, 13, 14, 15, 16);
+Stepper  LinearMotor  = Stepper(LinearMotorStepPerRev, 2,3);
+Stepper OrbitalMotor = Stepper(OrbitalMotorStepPerRev, 11,12);
 
   // Assign state variable to user input buttons to define pushed or not pushed, limit switches closed or not open, time, these are not constant.
 int Linear_ButtonState        = 0;
@@ -44,11 +44,10 @@ int Orbital_ButtonState       = 0;
 int D_1_ButtonState           = 0;
 int D_2_ButtonState           = 0;
 int D_3_ButtonState           = 0;
-int D_4_ButtonState           = 0; 
 int Limit_Switch_OneState     = 0;
 int Limit_Switch_TwoState     = 0;
 int Emergency_StopState       = 0;
-int Speed_PotState = 0;
+int Speed_PotState            = 0;
 int potValue                  = 0;
 int TrxpotValue               = 0;
 int  X                        = 0;
@@ -71,15 +70,13 @@ void setup() {
   
   
   // Set intial state as off for all controllers.
-  digitalWrite(Linear_ButtonPin,    LOW);
-  digitalWrite(Orbital_ButtonPin,   LOW);
-  digitalWrite(D_1_ButtonPin,       LOW);
-  digitalWrite(D_2_ButtonPin,       LOW);
-  digitalWrite(D_3_ButtonPin,       LOW);
-  digitalWrite(D_4_ButtonPin,       LOW);
+  analogWrite(Linear_ButtonPin,    LOW);
+  analogWrite(Orbital_ButtonPin,   LOW);
+  analogWrite(D_1_ButtonPin,       LOW);
+  analogWrite(D_2_ButtonPin,       LOW);
+  analogWrite(D_3_ButtonPin,       LOW);
   digitalWrite(Limit_Switch_OnePin, LOW);
   digitalWrite(Limit_Switch_TwoPin, LOW);
-  digitalWrite(Emergency_StopPin,   LOW);
 
   
   // Set user controllers as inputs.
@@ -88,11 +85,9 @@ void setup() {
   pinMode(D_1_ButtonPin,           INPUT);
   pinMode(D_2_ButtonPin,           INPUT);
   pinMode(D_3_ButtonPin,           INPUT);
-  pinMode(D_4_ButtonPin,           INPUT);
-  pinMode(Emergency_StopPin,       INPUT);
   pinMode(Limit_Switch_OnePin,     INPUT);
   pinMode(Limit_Switch_TwoPin,     INPUT);
-  pinMode(A0,                      INPUT);
+  pinMode(A7,                      INPUT);
   pinMode(Rotary_Encoder_ClickPin, INPUT):
   pinMode(Rotary_Encoder_DirPin,   INPUT);
   
@@ -111,10 +106,10 @@ void loop() {
   while (TimeStamp >= 0 && TimeStamp <= 5000) {
     // Linear motor zeroing sequence.
     // Define states for linear motor, and both limit switches.
-  Linear_ButtonState    = digitalRead(Linear_ButtonPin);
+  Linear_ButtonState    = analogRead(Linear_ButtonPin);
   Limit_Switch_OneState = digitalRead(Limit_Switch_OnePin);
   Limit_Switch_TwoState = digitalRead(Limit_Switch_TwoPin);
-  Speed_PotState = analogRead(0);
+  Speed_PotState = analogRead(7);
  
     // While loop for horizontal homing.
   while (Limit_Switch_TwoState != HIGH) {                                   // While limit switch one is open,
@@ -132,12 +127,11 @@ void loop() {
  
   // Shaking pattern selection. 
   // Read inputs.
- Linear_ButtonState    = digitalRead(Linear_ButtonPin);
- Orbital_ButtonState   = digitalRead(Orbital_ButtonPin);
- D_1_ButtonState       = digitalRead(D_1_ButtonState);
- D_2_ButtonState       = digitalRead(D_2_ButtonState);
- D_3_ButtonState       = digitalRead(D_3_ButtonState);
- D_4_ButtonState       = digitalRead(D_4_ButtonState); 
+ Linear_ButtonState    = analogRead(Linear_ButtonPin);
+ Orbital_ButtonState   = analogRead(Orbital_ButtonPin);
+ D_1_ButtonState       = analogRead(D_1_ButtonState);
+ D_2_ButtonState       = analogRead(D_2_ButtonState);
+ D_3_ButtonState       = analogRead(D_3_ButtonState);
   
   // Shaking size selction (diamter). 
   // Set five seconds for selection.
@@ -148,19 +142,15 @@ void loop() {
   while (TimeStamp > 5000 && TimeStamp <=10000) {
           // Print on LCD countdown
     if (D_1_ButtonState == HIGH) {
-      X = 0; //D_1_NumberOfSteps                   //***NEED ALL OF THESE TO DETERMINE THIS DISTANCE BY TEST***
-      Y = 0;
-    }                       
-    else if (D_2_ButtonState == HIGH){
-      X = 15.748; //D_2_NumberOfSteps
+      X = 15.748; //D_1_NumberOfSteps
       Y = 0; //Set up steps
     }
-    else if (D_3_ButtonState == HIGH){
-      X = 30.177; //D_3_NumberOfSteps
+    else if (D_2_ButtonState == HIGH){
+      X = 30.177; //D_2_NumberOfSteps
       Y = 13.858; //Set up steps
     }
-    else if (D_4_ButtonState == HIGH){
-      X = 43.858; //D_4_NumberOfSteps
+    else if (D_3_ButtonState == HIGH){
+      X = 43.858; //D_3_NumberOfSteps
       Y = 27.7165; //Set up steps
     }
   }
@@ -204,20 +194,17 @@ if (i == j) { // Linear shaking only.
     LinearStepper.step(-X);
     // Set stopping condition. 
     if (Linear_ButtonState == HIGH) {
-  digitalWrite(Linear_ButtonPin,    LOW);
-  digitalWrite(Orbital_ButtonPin,   LOW);
-  digitalWrite(D_1_ButtonPin,       LOW);
-  digitalWrite(D_2_ButtonPin,       LOW);
-  digitalWrite(D_3_ButtonPin,       LOW);
-  digitalWrite(D_4_ButtonPin,       LOW);
-  digitalWrite(LinearMotorPin,      LOW);
-  digitalWrite(OrbitalMotorPin,     LOW);
-  digitalWrite(Emergency_StopPin,   LOW);
+  analogWrite(Linear_ButtonPin,    LOW);
+  analogWrite(Orbital_ButtonPin,   LOW);
+  analogWrite(D_1_ButtonPin,       LOW);
+  analogWrite(D_2_ButtonPin,       LOW);
+  analogWrite(D_3_ButtonPin,       LOW);
+  digitalWrite(LinearMotor,        LOW);
+  digitalWrite(OrbitalMotor,       LOW);
   // Reset timer.
   TimeStamp = 0;
   // Exit loop.
   exit(0);
-      // IRELAND: add rotary encoder zeroing procedure, add reset timer, add send to start of loop. 
   }
   }
   else if (i == k) // Orbital shaking only.
@@ -233,15 +220,13 @@ if (i == j) { // Linear shaking only.
     OrbitalStepper.step(OrbitalMotorStepPerRev);
     if (Orbital_ButtonState == HIGH) {
   //stop all motion
-  digitalWrite(Linear_ButtonPin,    LOW);
-  digitalWrite(Orbital_ButtonPin,   LOW);
-  digitalWrite(D_1_ButtonPin,       LOW);
-  digitalWrite(D_2_ButtonPin,       LOW);
-  digitalWrite(D_3_ButtonPin,       LOW);
-  digitalWrite(D_4_ButtonPin,       LOW);
-  digitalWrite(LinearMotorPin,      LOW);
-  digitalWrite(OrbitalMotorPin,     LOW);
-  digitalWrite(Emergency_StopPin,   LOW);
+  analogWrite(Linear_ButtonPin,    LOW);
+  analogWrite(Orbital_ButtonPin,   LOW);
+  analogWrite(D_1_ButtonPin,       LOW);
+  analogWrite(D_2_ButtonPin,       LOW);
+  analogWrite(D_3_ButtonPin,       LOW);
+  digitalWrite(LinearMotor,        LOW);
+  digitalWrite(OrbitalMotor,       LOW);
   // pause 
   delay(3000);
   // Zero orbital motor
@@ -272,15 +257,13 @@ if (i == j) { // Linear shaking only.
       LinearStepper.step(-X);
       OrbitalStepper.step(OrbitalMotorStepPerRev);
         if (Orbital_ButtonState == HIGH || Linear_ButtonState == HIGH) {
-  digitalWrite(Linear_ButtonPin,    LOW);
-  digitalWrite(Orbital_ButtonPin,   LOW);
-  digitalWrite(D_1_ButtonPin,       LOW);
-  digitalWrite(D_2_ButtonPin,       LOW);
-  digitalWrite(D_3_ButtonPin,       LOW);
-  digitalWrite(D_4_ButtonPin,       LOW);
-  digitalWrite(LinearMotorPin,      LOW);
-  digitalWrite(OrbitalMotorPin,     LOW);
-  digitalWrite(Emergency_StopPin,   LOW);
+  analogWrite(Linear_ButtonPin,    LOW);
+  analogWrite(Orbital_ButtonPin,   LOW);
+  analogWrite(D_1_ButtonPin,       LOW);
+  analogWrite(D_2_ButtonPin,       LOW);
+  analogWrite(D_3_ButtonPin,       LOW);
+  digitalWrite(LinearMotor,        LOW);
+  digitalWrite(OrbitalMotor,       LOW);
   // pause 
   delay(3000);
   // Zero orbital motor
@@ -300,28 +283,12 @@ if (i == j) { // Linear shaking only.
   
   // Emergency stop sequence via limit switch detection.
   if (Limit_Switch_OneState == HIGH || Limit_Switch_TwoState == HIGH) {
-  digitalWrite(Linear_ButtonPin,    LOW);
-  digitalWrite(Orbital_ButtonPin,   LOW);
-  digitalWrite(D_1_ButtonPin,       LOW);
-  digitalWrite(D_2_ButtonPin,       LOW);
-  digitalWrite(D_3_ButtonPin,       LOW);
-  digitalWrite(D_4_ButtonPin,       LOW);
-  digitalWrite(LinearMotorPin,      LOW);
-  digitalWrite(OrbitalMotorPin,     LOW);
-  digitalWrite(Emergency_StopPin,   LOW);
-  }
-
-  // Emergency stop sequence via user stop. 
-  Emergency_StopState = digitalRead(Emergency_StopPin);
-  if (Emergency_StopState == HIGH) {
-  digitalWrite(Linear_ButtonPin,    LOW);
-  digitalWrite(Orbital_ButtonPin,   LOW);
-  digitalWrite(D_1_ButtonPin,       LOW);
-  digitalWrite(D_2_ButtonPin,       LOW);
-  digitalWrite(D_3_ButtonPin,       LOW);
-  digitalWrite(D_4_ButtonPin,       LOW);
-  digitalWrite(LinearMotorPin,      LOW);
-  digitalWrite(OrbitalMotorPin,     LOW);
-  digitalWrite(Emergency_StopPin,   LOW);
+  analogWrite(Linear_ButtonPin,    LOW);
+  analogWrite(Orbital_ButtonPin,   LOW);
+  analogWrite(D_1_ButtonPin,       LOW);
+  analogWrite(D_2_ButtonPin,       LOW);
+  analogWrite(D_3_ButtonPin,       LOW);
+  digitalWrite(LinearMotor,        LOW);
+  digitalWrite(OrbitalMotor,       LOW);
   }
 }
