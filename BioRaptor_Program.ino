@@ -17,10 +17,9 @@ const int OrbitalMotorStepPerRev = 200;
   // Assign pin number to controllers, these are constant values.  
 const int Linear_ButtonPin        = 1; //A3
 const int Orbital_ButtonPin       = 2; //A6
-const int D_1_ButtonPin           = 3; //REMOVE
-const int D_2_ButtonPin           = 4; //A0
-const int D_3_ButtonPin           = 5; //A1
-const int D_4_ButtonPin           = 6; //A2
+const int D_1_ButtonPin           = 4; //A0
+const int D_2_ButtonPin           = 5; //A1
+const int D_3_ButtonPin           = 6; //A2
 const int Limit_Switch_OnePin     = 4; //ACTUAL
 const int Limit_Switch_TwoPin     = 5; //ACTUAL
 const int Rotary_Encoder_Pin      = 17; 
@@ -43,8 +42,7 @@ int Linear_ButtonState        = 0;
 int Orbital_ButtonState       = 0;
 int D_1_ButtonState           = 0;
 int D_2_ButtonState           = 0;
-int D_3_ButtonState           = 0;
-int D_4_ButtonState           = 0; 
+int D_3_ButtonState           = 0; 
 int Limit_Switch_OneState     = 0;
 int Limit_Switch_TwoState     = 0;
 int Emergency_StopState       = 0;
@@ -74,7 +72,6 @@ void setup() {
   digitalWrite(D_1_ButtonPin,       LOW);
   digitalWrite(D_2_ButtonPin,       LOW);
   digitalWrite(D_3_ButtonPin,       LOW);
-  digitalWrite(D_4_ButtonPin,       LOW);
   digitalWrite(LinearStepper,      LOW);
   digitalWrite(OrbitalStepper,     LOW);
   digitalWrite(Limit_Switch_OnePin, LOW);
@@ -87,7 +84,6 @@ void setup() {
   pinMode(D_1_ButtonPin,      INPUT);
   pinMode(D_2_ButtonPin,      INPUT);
   pinMode(D_3_ButtonPin,      INPUT);
-  pinMode(D_4_ButtonPin,      INPUT);
   pinMode(Emergency_StopPin,  INPUT);
   pinMode(Limit_Switch_OnePin, INPUT);
   pinMode(Limit_Switch_TwoPin, INPUT);
@@ -144,16 +140,13 @@ void loop() {
 while (TimeStamp > 5000 && TimeStamp =<10000) {
   // Print on LCD countdown
   if (D_1_ButtonState == HIGH) {
-  X = 0; //D_1_NumberOfSteps                   //***NEED ALL OF THESE TO DETERMINE THIS DISTANCE BY TEST***
-    Y = 0;                       
-  else if (D_2_ButtonState == HIGH)
-    X = 15.748; //D_2_NumberOfSteps
+    X = 15.748; //D_1_NumberOfSteps
     Y = 0; //Set up steps
-    else if (D_3_ButtonState == HIGH)
-      X = 30.177; //D_3_NumberOfSteps
+    else if (D_2_ButtonState == HIGH)
+      X = 30.177; //D_2_NumberOfSteps
       Y = 13.858; //Set up steps
-    else if (D_4_ButtonState == HIGH)
-      X = 43.858; //D_4_NumberOfSteps
+    else if (D_3_ButtonState == HIGH)
+      X = 43.858; //D_3_NumberOfSteps
       Y = 27.7165; //Set up steps
   }
 }
@@ -199,7 +192,6 @@ if (i == j) { // Linear shaking only.
   digitalWrite(D_1_ButtonPin,       LOW);
   digitalWrite(D_2_ButtonPin,       LOW);
   digitalWrite(D_3_ButtonPin,       LOW);
-  digitalWrite(D_4_ButtonPin,       LOW);
   digitalWrite(LinearMotorPin,      LOW);
   digitalWrite(OrbitalMotorPin,     LOW);
   digitalWrite(Emergency_StopPin,   LOW);
@@ -228,7 +220,6 @@ if (i == j) { // Linear shaking only.
   digitalWrite(D_1_ButtonPin,       LOW);
   digitalWrite(D_2_ButtonPin,       LOW);
   digitalWrite(D_3_ButtonPin,       LOW);
-  digitalWrite(D_4_ButtonPin,       LOW);
   digitalWrite(LinearMotorPin,      LOW);
   digitalWrite(OrbitalMotorPin,     LOW);
   digitalWrite(Emergency_StopPin,   LOW);
@@ -267,7 +258,6 @@ if (i == j) { // Linear shaking only.
   digitalWrite(D_1_ButtonPin,       LOW);
   digitalWrite(D_2_ButtonPin,       LOW);
   digitalWrite(D_3_ButtonPin,       LOW);
-  digitalWrite(D_4_ButtonPin,       LOW);
   digitalWrite(LinearMotorPin,      LOW);
   digitalWrite(OrbitalMotorPin,     LOW);
   digitalWrite(Emergency_StopPin,   LOW);
@@ -295,7 +285,6 @@ if (i == j) { // Linear shaking only.
   digitalWrite(D_1_ButtonPin,       LOW);
   digitalWrite(D_2_ButtonPin,       LOW);
   digitalWrite(D_3_ButtonPin,       LOW);
-  digitalWrite(D_4_ButtonPin,       LOW);
   digitalWrite(LinearMotorPin,      LOW);
   digitalWrite(OrbitalMotorPin,     LOW);
   digitalWrite(Emergency_StopPin,   LOW);
@@ -309,7 +298,6 @@ if (i == j) { // Linear shaking only.
   digitalWrite(D_1_ButtonPin,       LOW);
   digitalWrite(D_2_ButtonPin,       LOW);
   digitalWrite(D_3_ButtonPin,       LOW);
-  digitalWrite(D_4_ButtonPin,       LOW);
   digitalWrite(LinearMotorPin,      LOW);
   digitalWrite(OrbitalMotorPin,     LOW);
   digitalWrite(Emergency_StopPin,   LOW);
