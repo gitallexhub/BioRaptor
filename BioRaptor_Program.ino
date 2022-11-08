@@ -22,8 +22,9 @@ const int D_2_ButtonPin             = A1;
 const int D_3_ButtonPin             = A2;
 const int Limit_Switch_OnePin       = 4;
 const int Limit_Switch_TwoPin       = 5;
-const int Rotary_Encoder_ClickPin   = D6;
-const int Rotary_Encoder_DirPin     = D7;
+const int Rotary_Encoder_ClickPin   = 6;
+const int Rotary_Encoder_DirPin     = 7;
+const int moderateSpeed             = 20;
 //LCD = A4, A5 ACTUAL
 //Potentiometer = A7 ACTUAL
 
@@ -52,8 +53,14 @@ int potValue                  = 0;
 int TrxpotValue               = 0;
 int  X                        = 0;
 int  Y                        = 0;
+int  i                        = 0;
+int  j                        = 0;
+int  k                        = 0;
+int  m                        = 0;
 int MotorSpeed                = 0;
-  // Define step count. Not sure how this works.
+
+
+
 // int LinearMotorSteps      = 0;
 // int OrbitalMotorSteps     = 0;
  
@@ -88,7 +95,7 @@ void setup() {
   pinMode(Limit_Switch_OnePin,     INPUT);
   pinMode(Limit_Switch_TwoPin,     INPUT);
   pinMode(A7,                      INPUT);
-  pinMode(Rotary_Encoder_ClickPin, INPUT):
+  pinMode(Rotary_Encoder_ClickPin, INPUT);
   pinMode(Rotary_Encoder_DirPin,   INPUT);
   
   
@@ -145,14 +152,17 @@ void loop() {
       X = 15.748; //D_1_NumberOfSteps
       Y = 0; //Set up steps
     }
+    
     else if (D_2_ButtonState == HIGH){
       X = 30.177; //D_2_NumberOfSteps
       Y = 13.858; //Set up steps
     }
+    
     else if (D_3_ButtonState == HIGH){
       X = 43.858; //D_3_NumberOfSteps
       Y = 27.7165; //Set up steps
     }
+    
   }
 
       // Set motor speed.
@@ -166,7 +176,7 @@ void loop() {
         int Speed_PontentiometerState = analogRead(0);
         MotorSpeed = map(Speed_PotState, 0, 1023, 0, 350);
       }
-    }
+  }
       // Set shaking pattern. 
       // Set five second for pattern selection.
   while (TimeStamp >15000 && TimeStamp <= 20000) {
@@ -174,110 +184,122 @@ void loop() {
     if (Linear_ButtonState == HIGH) {
       i = j;
     }
+    
     else if (Orbital_ButtonState == HIGH){
       i = k;
     }
-    else if (Linear_ButtonState == HIGH && Orbital_ButtonState == HIGH)
+    else if (Linear_ButtonState == HIGH && Orbital_ButtonState == HIGH){
           i = m;
     }
 }
 
 //Define moderate speed for set up procedures. 
-moderateSpeed = 20;
+//moderateSpeed = 20;
 
 // Read shaking pattern selection (linear, orbital, or double orbital), and set up for correct shaking size, and shaking speed.
-if (i == j) { // Linear shaking only.
-  // Set indefinite time for shaking to carry out.
-  while (TimeStamp > 20000) { 
-   LinearStepper.setSpeed(MotorSpeed);
-    LinearStepper.step(X);
-    LinearStepper.step(-X);
-    // Set stopping condition. 
-    if (Linear_ButtonState == HIGH) {
-  analogWrite(Linear_ButtonPin,    LOW);
-  analogWrite(Orbital_ButtonPin,   LOW);
-  analogWrite(D_1_ButtonPin,       LOW);
-  analogWrite(D_2_ButtonPin,       LOW);
-  analogWrite(D_3_ButtonPin,       LOW);
-  digitalWrite(LinearMotor,        LOW);
-  digitalWrite(OrbitalMotor,       LOW);
-  // Reset timer.
-  TimeStamp = 0;
-  // Exit loop.
-  exit(0);
+  if (i == j) { // Linear shaking only.
+      // Set indefinite time for shaking to carry out.
+      while (TimeStamp > 20000) { 
+          LinearMotor.setSpeed(MotorSpeed);
+          LinearMotor.step(X);
+          LinearMotor.step(-X);
+          // Set stopping condition. 
+            if (Linear_ButtonState == HIGH) {
+                analogWrite(Linear_ButtonPin,    LOW);
+                analogWrite(Orbital_ButtonPin,   LOW);
+                analogWrite(D_1_ButtonPin,       LOW);
+                analogWrite(D_2_ButtonPin,       LOW);
+                analogWrite(D_3_ButtonPin,       LOW);
+                //digitalWrite(LinearMotor,        LOW);
+                //digitalWrite(OrbitalMotor,       LOW);
+                // Reset timer.
+                TimeStamp = 0;
+                // Exit loop.
+                exit(0);
+              }
+          }
   }
-  }
-  else if (i == k) // Orbital shaking only.
-    // Set indefinite shaking time.
-  while (TimeStamp > 20000) {
-    OrbitalStepper.setSpeed(moderateSpeed);
-    OrbitalStepper.step(-totalStepCountFromInitialPosition);
-    delay(3000);
-    LinearStepper.setSpeed(moderateSpeed);
-    LinearStepper.step(Y);
-    delay(3000);
-    OrbitalStepper.setSpeed(MotorSpeed);
-    OrbitalStepper.step(OrbitalMotorStepPerRev);
-    if (Orbital_ButtonState == HIGH) {
-  //stop all motion
-  analogWrite(Linear_ButtonPin,    LOW);
-  analogWrite(Orbital_ButtonPin,   LOW);
-  analogWrite(D_1_ButtonPin,       LOW);
-  analogWrite(D_2_ButtonPin,       LOW);
-  analogWrite(D_3_ButtonPin,       LOW);
-  digitalWrite(LinearMotor,        LOW);
-  digitalWrite(OrbitalMotor,       LOW);
-  // pause 
-  delay(3000);
-  // Zero orbital motor
-  // Remove orbital motor shaft from diameter selction. If it is D1, it will just be zero steps horizontally
-  OrbitalStepper.setSpeed(moderateSpeed);
-  OrbitalStepper.step(-totalStepCountFromInitialPosition); 
-  delay(3000);
-  LinearStepper.setSpeed(moderateSpeed);
-  LinearStepper.step(-Y);
-  // Reset timer.
-  TimeStamp = 0;
-  // Exit loop
-  exit(0);
-  }  
-  }
-    else if (i == m) // Double orbital shaking.
+      
+      else if (i == k){ // Orbital shaking only.
+          // Set indefinite shaking time.
+        while (TimeStamp > 20000) {
+            OrbitalMotor.setSpeed(moderateSpeed);
+            OrbitalMotor.step(-totalOrbitalMotorStepCountFromInitialPosition);
+            delay(3000);
+            LinearMotor.setSpeed(moderateSpeed);
+            LinearMotor.step(Y);
+            delay(3000);
+            OrbitalMotor.setSpeed(MotorSpeed);
+            OrbitalMotor.step(OrbitalMotorStepPerRev);
+            if (Orbital_ButtonState == HIGH) {
+                  //stop all motion
+                  analogWrite(Linear_ButtonPin,    LOW);
+                  analogWrite(Orbital_ButtonPin,   LOW);
+                  analogWrite(D_1_ButtonPin,       LOW);
+                  analogWrite(D_2_ButtonPin,       LOW);
+                  analogWrite(D_3_ButtonPin,       LOW);
+                  //digitalWrite(LinearMotor,        LOW); //2
+                  //digitalWrite(OrbitalMotor,       LOW); //3
+                  // pause 
+                  delay(3000);
+                  // Zero orbital motor
+                  // Remove orbital motor shaft from diameter selction. If it is D1, it will just be zero steps horizontally
+                  OrbitalMotor.setSpeed(moderateSpeed);
+                  OrbitalMotor.step(-totalOrbitalMotorStepCountFromInitialPosition); 
+                  delay(3000);
+                  LinearMotor.setSpeed(moderateSpeed);
+                  LinearMotor.step(-Y);
+                  // Reset timer.
+                  TimeStamp = 0;
+                  // Exit loop
+                  exit(0);
+              }  
+          }
+      }
+
+  
+    else if (i == m){ // Double orbital shaking.
       // Set indefinite shaking time.
+    
+      
       while (TimeStamp > 20000) {
-      OrbitalStepper.setSpeed(moderateSpeed);
-      OrbitalStepper.step(-totalStepCountFromInitialPosition);
+      OrbitalMotor.setSpeed(moderateSpeed);
+      OrbitalMotor.step(-totalOrbitalMotorStepCountFromInitialPosition);
       delay(3000);
-      LinearStepper.setSpeed(moderateSpeed);
-      LinearStepper.step(Y);
+      LinearMotor.setSpeed(moderateSpeed);
+      LinearMotor.step(Y);
       delay(3000);
-      LinearStepper.setSpeed(MotorSpeed);
-      OrbitalStepper.setSpeed(MotorSpeed)
-      LinearStepper.step(X);
-      LinearStepper.step(-X);
-      OrbitalStepper.step(OrbitalMotorStepPerRev);
+      LinearMotor.setSpeed(MotorSpeed);
+      OrbitalMotor.setSpeed(MotorSpeed);
+      LinearMotor.step(X);
+      LinearMotor.step(-X);
+      OrbitalMotor.step(OrbitalMotorStepPerRev);
         if (Orbital_ButtonState == HIGH || Linear_ButtonState == HIGH) {
-  analogWrite(Linear_ButtonPin,    LOW);
-  analogWrite(Orbital_ButtonPin,   LOW);
-  analogWrite(D_1_ButtonPin,       LOW);
-  analogWrite(D_2_ButtonPin,       LOW);
-  analogWrite(D_3_ButtonPin,       LOW);
-  digitalWrite(LinearMotor,        LOW);
-  digitalWrite(OrbitalMotor,       LOW);
-  // pause 
-  delay(3000);
-  // Zero orbital motor
-  // Remove orbital motor shaft from diameter selction. If it is D1, it will just be zero steps horizontally
-  OrbitalStepper.setSpeed(moderateSpeed);
-  OrbitalStepper.step(-totalStepCountFromInitialPosition); 
-  delay(3000);
-  LinearStepper.setSpeed(moderateSpeed);
-  LinearStepper.step(-Y);
-  // Reset timer.
-  TimeStamp = 0;
-  // Exit loop
-  exit(0);
-        }
+            analogWrite(Linear_ButtonPin,    LOW);
+            analogWrite(Orbital_ButtonPin,   LOW);
+            analogWrite(D_1_ButtonPin,       LOW);
+            analogWrite(D_2_ButtonPin,       LOW);
+            analogWrite(D_3_ButtonPin,       LOW);
+            //digitalWrite(LinearMotor,        LOW);
+            //digitalWrite(OrbitalMotor,       LOW);
+           
+            // pause 
+            delay(3000);
+            
+            // Zero orbital motor
+            // Remove orbital motor shaft from diameter selction. If it is D1, it will just be zero steps horizontally
+            OrbitalMotor.setSpeed(moderateSpeed);
+            OrbitalMotor.step(-totalOrbitalMotorStepCountFromInitialPosition); 
+            delay(3000);
+            LinearMotor.setSpeed(moderateSpeed);
+            LinearMotor.step(-Y);
+            
+            // Reset timer.
+            TimeStamp = 0;
+            
+            // Exit loop
+            exit(0);
+          }
       }
   }
   
@@ -288,7 +310,9 @@ if (i == j) { // Linear shaking only.
   analogWrite(D_1_ButtonPin,       LOW);
   analogWrite(D_2_ButtonPin,       LOW);
   analogWrite(D_3_ButtonPin,       LOW);
-  digitalWrite(LinearMotor,        LOW);
-  digitalWrite(OrbitalMotor,       LOW);
+  digitalWrite(2,                  LOW);   //Linear Motor
+  digitalWrite(3,                  LOW); //Orbital Motor
+  digitalWrite(11,                 LOW); //Linear Motor
+  digitalWrite(12,                 LOW); //Orbital Motor
   }
 }
