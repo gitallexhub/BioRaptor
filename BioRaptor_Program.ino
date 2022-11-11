@@ -74,8 +74,8 @@ void setup() {
   lcd.print("System On");
   delay(1000);
   lcd.clear();
-  
-  
+//  
+//  
   // Set intial state as off for all controllers.
   analogWrite(Linear_ButtonPin,    LOW);
   analogWrite(Orbital_ButtonPin,   LOW);
@@ -106,30 +106,34 @@ void setup() {
 }
 
 void loop() {
-
-  // Get current time. 
-  TimeStamp = millis();
-  // Set five seconds for zeroing sequence.
-  while (TimeStamp >= 0 && TimeStamp <= 5000) {
+    Serial.begin(9600);
+    // Get current time. 
+    TimeStamp = millis();
+    // Set five seconds for zeroing sequence.
+    Serial.print(A3);
+    lcd.clear();
+    lcd.setCursor(0,0);
+    lcd.print("Horizontal Zero");
+  while (TimeStamp >= 3000 && TimeStamp <= 15000) {
     // Linear motor zeroing sequence.
     // Define states for linear motor, and both limit switches.
-  Linear_ButtonState    = analogRead(Linear_ButtonPin);
-  Limit_Switch_OneState = digitalRead(Limit_Switch_OnePin);
-  Limit_Switch_TwoState = digitalRead(Limit_Switch_TwoPin);
-  Speed_PotState = analogRead(7);
+    Linear_ButtonState    = analogRead(Linear_ButtonPin);
+    Limit_Switch_OneState = digitalRead(Limit_Switch_OnePin);
+    Limit_Switch_TwoState = digitalRead(Limit_Switch_TwoPin);
+    Speed_PotState = analogRead(7);
  
-    // While loop for horizontal homing.
-  while (Limit_Switch_TwoState != HIGH) {                                   // While limit switch one is open,
-      //moderateSpeed = 20;                                                   // Set moderate motor speed
-      LinearMotor.setSpeed(-20);                               // Set linear motor speed to potentiometer input,
-      LinearMotor.step(LinearMotorStepPerRev/100);                        // Send step command. **** DIRECTION NEEDS TO BE VERIFIED****
-    }
-    if (Limit_Switch_TwoState == HIGH) {                                    // If limit switch two is closed, (while loop ends and thus, motor should stop stepping
-    //  NumberOfSteps = 50;                                                   // Set number of steps to the halfway point (as measured through computation/test),
-      LinearMotor.setSpeed(20);                                     // Change motor direction,
-      LinearMotor.step(50);                                               // Send step command, this should send the motor to halfway between the limit switches, i.e., the middle of the rail.
-    }
-  }
+      // While loop for horizontal homing.
+      while (Limit_Switch_TwoState != HIGH) {                                   // While limit switch one is open,
+                                                        // Set moderate motor speed
+          LinearMotor.setSpeed(-100);                               // Set linear motor speed to potentiometer input,
+          LinearMotor.step(LinearMotorStepPerRev/100);                        // Send step command. **** DIRECTION NEEDS TO BE VERIFIED****
+        }
+            if (Limit_Switch_TwoState == HIGH) {                                    // If limit switch two is closed, (while loop ends and thus, motor should stop stepping
+              //  NumberOfSteps = 50;                                                   // Set number of steps to the halfway point (as measured through computation/test),
+              LinearMotor.setSpeed(-100);                                     // Change motor direction,
+              LinearMotor.step(50);                                               // Send step command, this should send the motor to halfway between the limit switches, i.e., the middle of the rail.
+            }
+   }
 
  
   // Shaking pattern selection. 
@@ -143,10 +147,12 @@ void loop() {
   // Shaking size selction (diamter). 
   // Set five seconds for selection.
   //Print on LCD "make diameter selection"
-  // delay(3000);
+  delay(3000);
 
-
-  while (TimeStamp > 5000 && TimeStamp <=10000) {
+lcd.clear();
+lcd.print("10 seconds");
+  while (TimeStamp > 15000 && TimeStamp <=25000) {
+    lcd.print("Make diameter selection");
           // Print on LCD countdown
     if (D_1_ButtonState == HIGH) {
       X = 15.748; //D_1_NumberOfSteps
@@ -168,8 +174,8 @@ void loop() {
       // Set motor speed.
       // Set five seconds for motor speed selection. 
       // print "make speed selection"
-      //delay(3000);
-  while (TimeStamp >10000 && TimeStamp <= 15000) {
+      delay(3000);
+  while (TimeStamp >28000 && TimeStamp <= 38000) {
         // print countdown
     if (Speed_PotState == HIGH) {
         // Define motor speed.
@@ -179,7 +185,7 @@ void loop() {
   }
       // Set shaking pattern. 
       // Set five second for pattern selection.
-  while (TimeStamp >15000 && TimeStamp <= 20000) {
+  while (TimeStamp >28000 && TimeStamp <= 38000) {
        // ALEX: Print on LCD to make shape selection. 
     if (Linear_ButtonState == HIGH) {
       i = j;
@@ -199,7 +205,7 @@ void loop() {
 // Read shaking pattern selection (linear, orbital, or double orbital), and set up for correct shaking size, and shaking speed.
   if (i == j) { // Linear shaking only.
       // Set indefinite time for shaking to carry out.
-      while (TimeStamp > 20000) { 
+      while (TimeStamp > 38000) { 
           LinearMotor.setSpeed(MotorSpeed);
           LinearMotor.step(X);
           LinearMotor.step(-X);
@@ -222,7 +228,7 @@ void loop() {
       
       else if (i == k){ // Orbital shaking only.
           // Set indefinite shaking time.
-        while (TimeStamp > 20000) {
+        while (TimeStamp > 38000) {
             OrbitalMotor.setSpeed(moderateSpeed);
             OrbitalMotor.step(-totalOrbitalMotorStepCountFromInitialPosition);
             delay(3000);
@@ -262,7 +268,7 @@ void loop() {
       // Set indefinite shaking time.
     
       
-      while (TimeStamp > 20000) {
+      while (TimeStamp > 38000) {
       OrbitalMotor.setSpeed(moderateSpeed);
       OrbitalMotor.step(-totalOrbitalMotorStepCountFromInitialPosition);
       delay(3000);
@@ -303,7 +309,7 @@ void loop() {
       }
   }
   
-  // Emergency stop sequence via limit switch detection.
+   //Emergency stop sequence via limit switch detection.
   if (Limit_Switch_OneState == HIGH || Limit_Switch_TwoState == HIGH) {
   analogWrite(Linear_ButtonPin,    LOW);
   analogWrite(Orbital_ButtonPin,   LOW);
